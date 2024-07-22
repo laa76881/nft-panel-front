@@ -1,0 +1,35 @@
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 512px;
+    max-width: 90%;
+    gap: 16px;
+    margin: 0 auto;
+    padding: 40px 20px;
+    background: lavender;
+  
+    &__row {
+      position: relative;
+      width: 70%;
+      display: flex;
+      flex-direction: column;
+  
+      &:not(:last-child) {
+        padding-bottom: 20px;
+      }
+    }
+  
+    &__input,
+    &__submit {
+      padding: 8px;
+      font-size: 16px;
+    }
+  
+    &__input {
+      &-error {
+        position: absolute;
+        bottom: 0;
+      }
+    }
+  }

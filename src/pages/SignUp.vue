@@ -1,15 +1,16 @@
+
 <template>
-  <div class="login">
-    <LoginForm />
+  <div class="sign-up">
+    <SignUpForm />
   </div>
 </template>
 
 <script setup>
-import LoginForm from "@/components/forms/LoginForm.vue";
+import SignUpForm from "@/components/forms/SignUpForm.vue";
 </script>
 
 <style lang="scss" scoped>
-.login {
+.sign-up {
   height: 100vh;
   display: flex;
   align-items: center;

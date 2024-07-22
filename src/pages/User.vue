@@ -5,22 +5,16 @@
 </template>
 
 <script setup>
-import { useRoute, useRouter } from "vue-router";
+import { useRoute } from "vue-router";
 import { onMounted, ref } from "vue";
-import { getUser } from "/api/users.js";
+import { useUsers } from "@/store/users.js";
 
+const usersStore = useUsers();
 const route = useRoute();
-const router = useRouter();
-
 const user = ref({});
 
 onMounted(() => {
-  getUser(route.params.id)
-    .then(({ data }) => {
-      console.log("done", data);
-      user.value = data;
-    })
-    .catch((error) => console.log(error));
+  usersStore.getUser(route.params.id).then((data) => (user.value = data));
 });
 </script>
 
