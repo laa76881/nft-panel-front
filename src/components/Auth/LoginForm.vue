@@ -1,5 +1,9 @@
 <template>
   <form class="auth-form" @submit.prevent="onSubmit">
+    <h2 class="auth-form__heading">Log in</h2>
+    <p class="auth-form__subheading">
+      If you don't have an account <router-link to="/sign-up" class="color-violet">Sign up</router-link>
+    </p>
     <div class="auth-form__row">
       <label for="email" class="fz-sm">Email</label>
       <input
@@ -39,7 +43,7 @@
         type="submit"
         :disabled="loading"
       >
-        Login
+        Log in
       </button>
     </div>
   </form>
@@ -82,6 +86,7 @@ const onSubmit = handleSubmit(async (values, { setErrors }) => {
     })
     .then(() => {
       console.log("done login");
+      router.push({ name: "home" });
       //   await authStore
       //     .getMe()
       //     .then(() => {
@@ -95,22 +100,16 @@ const onSubmit = handleSubmit(async (values, { setErrors }) => {
       //     });
     })
     .catch((error) => {
-      console.log("error validate", error);
-      //   loading.value = false;
-      const errors = error.response._data?.errors;
-
-      setErrors({
-        email: errors.email[0] === "" ? "ignored" : errors.email || "",
-        password: errors.password || "",
-      });
+      const errors = error.response?._data?.errors;
+      if (errors) {
+        setErrors({
+          email: errors.email[0] === "" ? "ignored" : errors.email || "",
+          password: errors.password || "",
+        });
+      }
     })
     .finally(() => {
-      console.log('finally')
-      loading.value = false
-    })
+      loading.value = false;
+    });
 });
 </script>
-
-<style lang="scss" scoped>
-@import "@/assets/scss/auth.scss";
-</style>

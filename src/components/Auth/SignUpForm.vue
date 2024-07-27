@@ -1,5 +1,9 @@
 <template>
   <form class="auth-form" @submit.prevent="onSubmit">
+    <h2 class="auth-form__heading">Sign up</h2>
+    <p class="auth-form__subheading">
+      If you have account <router-link to="/login">Log in</router-link>
+    </p>
     <div class="auth-form__row">
       <label for="first_name" class="fz-sm">First name</label>
       <input
@@ -101,12 +105,11 @@
 import { useField, useForm } from "vee-validate";
 import { useAuth } from "@/store/auth.js";
 import { signUpForm } from "@/config/validation-schemas.js";
-
-import { useRouter } from "vue-router";
+import { useToast } from "@/main";
 import { ref } from "vue";
 
 const authStore = useAuth();
-const router = useRouter();
+const emit = defineEmits(["submitted"]);
 
 const { handleSubmit } = useForm({
   validationSchema: signUpForm,
@@ -138,26 +141,23 @@ const onSubmit = handleSubmit(async (values, { setErrors }) => {
       password_confirmation: values.password_confirmation,
     })
     .then((res) => {
-        // bad try
-        console.log('listen', res)
+      if (res.message) useToast(res.message, "success");
+      emit("submitted", { email: values.email });
     })
     .catch((error) => {
-      const errors = error.response._data?.errors;
-      setErrors({
-        first_name: errors.first_name || "",
-        last_name: errors.last_name || "",
-        email: errors.email[0] === "" ? "ignored" : errors.email || "",
-        password: errors.password || "",
-        password_confirmation: errors.password_confirmation || "",
-      });
+      const errors = error.response?._data?.errors;
+      if (errors) {
+        setErrors({
+          first_name: errors.first_name || "",
+          last_name: errors.last_name || "",
+          email: errors.email[0] === "" ? "ignored" : errors.email || "",
+          password: errors.password || "",
+          password_confirmation: errors.password_confirmation || "",
+        });
+      }
     })
     .finally(() => {
-      console.log("finally");
       loading.value = false;
     });
 });
 </script>
-
-<style lang="scss" scoped>
-@import "@/assets/scss/auth.scss";
-</style>

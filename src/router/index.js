@@ -4,16 +4,13 @@ import { createRouter, createWebHistory } from "vue-router";
 const Home = () => import("@/pages/Home.vue");
 const Login = () => import("@/pages/Login.vue")
 const SignUp = () => import("@/pages/SignUp.vue")
+const EmailConfirmed = () => import("@/pages/EmailConfirmed.vue")
+const Expired = () => import("@/pages/Expired.vue")
 const Users = () => import("@/pages/Users.vue");
 const User = () => import("@/pages/User.vue");
 const ErrorPage = () => import("@/pages/Error.vue");
 
 const routes = [
-  {
-    path: "/",
-    name: "home",
-    component: Home,
-  },
   {
     path: "/login",
     name: "login",
@@ -25,22 +22,43 @@ const routes = [
     component: SignUp
   },
   {
+    path: "/email-confirmed",
+    name: "email-confirmed",
+    component: EmailConfirmed
+  },
+  {
+    path: "/expired",
+    name: "expired",
+    component: Expired
+  },
+  {
+    path: "/",
+    name: "home",
+    component: Home,
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
     path: "/users",
     name: "users",
     component: Users,
-    // meta: {
-    //   requiresAuth: true
-    // }
+    meta: {
+      requiresAuth: true
+    }
   },
   {
     path: "/user/:id",
     name: "user",
-    component: User
+    component: User,
+    meta: {
+      requiresAuth: true
+    }
   },
   {
     path: "/:pathMatch(.*)*",
     name: "ErrorPage",
-    component: ErrorPage
+    component: ErrorPage,
   }
 ];
 
@@ -50,17 +68,15 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  if (to.meta.requiresAuth) {
-    console.log('need auth')
-    const token = localStorage.getItem('token');
-    console.log('token', token)
-    if (token) {
-      next();
-    } else {
-      next('/login');
-    }
-  } else {
+  const token = localStorage.getItem('token');
+  console.log('token', token)
+
+  if ((token && to.meta.requiresAuth) || (!token && !to.meta.requiresAuth) || to.name === 'ErrorPage') {
     next();
+  } else if (token && !to.meta.requiresAuth) {
+    next('/')
+  } else {
+    next('/login');
   }
 });
 

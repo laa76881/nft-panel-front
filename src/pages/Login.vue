@@ -1,18 +1,13 @@
 <template>
-  <div class="login">
+  <div class="auth">
     <LoginForm />
   </div>
 </template>
 
 <script setup>
-import LoginForm from "@/components/forms/LoginForm.vue";
+import LoginForm from "@/components/Auth/LoginForm.vue";
 </script>
 
-<style lang="scss" scoped>
-.login {
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
+<style lang="scss">
+@import "@/assets/scss/auth.scss";
 </style>

@@ -1,8 +1,7 @@
 
 <template>
   <div id="app">
-    <app-header /> 
-    <!-- v-if="me"  -->
+    <app-header v-if="me" />
 
     <div class="app__inner">
       <router-view />

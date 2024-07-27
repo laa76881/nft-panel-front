@@ -1,7 +1,12 @@
-$app-bg       : #ebebeb;
-
-$color-danger: red;
+$app-bg           : #ebebeb;
+$button-background: deepskyblue;
+$color-violet     : darkviolet;
+$color-danger     : red;
 
 .color-danger {
     color: $color-danger;
+}
+
+.color-violet {
+    color: $color-violet;
 }

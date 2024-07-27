@@ -1,20 +1,47 @@
 * {
     font-family: 'Roboto Flex', sans-serif;
     box-sizing : border-box;
+
+
+    font-family: "Montserrat", sans-serif;
+    font-weight: 500;
 }
 
-html, body {
+html,
+body,
+p,
+h1,
+h2,
+h3 {
     margin: 0;
+}
+
+h1,
+h2,
+h3 {
+    font-weight: 600;
 }
 
 body {
     font-size: 16px;
 }
 
-.app__inner {
-    // margin: 20px;
+.fz-sm {
+    font-size: 13px;
 }
 
-.fz-sm {
-    font-size: 14px;
+.ta-center {
+    text-align: center;
+}
+
+.app-button {
+    background: $button-background;
+    padding   : 8px 48px;
+    font-size : 16px;
+    border    : 2px solid $color-violet;
+
+    &:hover {
+        cursor : pointer;
+        opacity: 0.85;
+    }
 }

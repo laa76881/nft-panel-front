@@ -1,35 +1,55 @@
+.auth {
+  height         : 100vh;
+  display        : flex;
+  align-items    : center;
+  justify-content: center;
+}
+
 .auth-form {
-    display: flex;
+  display          : flex;
+  flex-direction   : column;
+  align-items      : center;
+  width            : 512px;
+  max-width        : 90%;
+  gap              : 10px;
+  margin           : 0 auto;
+  // padding       : 40px 20px;
+  padding          : 32px 20px;
+  background       : lavender;
+  border           : 2px solid $color-violet;
+
+  &__row {
+    position      : relative;
+    width         : 75%;
+    display       : flex;
     flex-direction: column;
-    align-items: center;
-    width: 512px;
-    max-width: 90%;
-    gap: 16px;
-    margin: 0 auto;
-    padding: 40px 20px;
-    background: lavender;
-  
-    &__row {
-      position: relative;
-      width: 70%;
-      display: flex;
-      flex-direction: column;
-  
-      &:not(:last-child) {
-        padding-bottom: 20px;
-      }
-    }
-  
-    &__input,
-    &__submit {
-      padding: 8px;
-      font-size: 16px;
-    }
-  
-    &__input {
-      &-error {
-        position: absolute;
-        bottom: 0;
-      }
+
+    &:not(:last-child) {
+      padding-bottom: 20px;
     }
   }
+
+  &__input {
+    padding  : 8px;
+    font-size: 16px;
+    border   : 2px solid $color-violet;
+    outline  : none;
+
+    &:focus {
+      border: 2px solid black;
+    }
+
+    &-error {
+      position: absolute;
+      bottom  : 0;
+    }
+  }
+
+  &__subheading {
+    margin-bottom: 10px;
+  }
+
+  &-request {
+    grid-gap: 40px;
+  }
+}

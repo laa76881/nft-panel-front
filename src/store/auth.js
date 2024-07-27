@@ -1,8 +1,6 @@
 import { defineStore } from 'pinia'
 import { useRequest } from "@/composables/useFetch"
-
-import { toast } from "vue3-toastify";
-import "vue3-toastify/dist/index.css";
+// import { useToast } from "@/main"
 
 export const useAuth = defineStore("auth", {
     state: () => ({
@@ -23,19 +21,19 @@ export const useAuth = defineStore("auth", {
                 })
         },
         async signUp(body) {
-            await useRequest('auth/sign-up', {
+            return await useRequest('auth/sign-up', {
                 method: 'POST',
                 body
             })
-                .then((data) => {
-                    if (data.message) toast(data.message, {
-                        theme: "colored",
-                        type: "success",
-                        position: "top-center",
-                        transition: "slide",
-                        dangerouslyHTMLString: true,
-                    });
-                })
+        },
+        async resendLink({email}) {
+            console.log('store', email)
+            return await useRequest('auth/resend-verification', {
+                method: 'POST',
+                body: {
+                    email
+                }
+            })
         }
         // login({ email, password }) {
         //     return useRequest("/auth/login", {

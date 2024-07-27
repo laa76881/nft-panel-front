@@ -1,11 +1,10 @@
 
 import { createFetch } from '@vueuse/core'
-
-import { toast } from "vue3-toastify";
-import "vue3-toastify/dist/index.css";
+import { useToast } from "@/main"
 
 export const useMyFetch = createFetch({
-  baseUrl: 'http://localhost:3000/api',
+  // baseUrl: process.env.BASE_URL + '/api',
+  baseUrl: 'http://localhost:3000' + '/api', // for tests
   options: {
     async beforeFetch({ options }) {
       const token = localStorage.getItem('token') || ''
@@ -13,6 +12,11 @@ export const useMyFetch = createFetch({
       options.headers['Content-Type'] = 'application/json'
       return { options }
     },
+    onFetchError(ctx) {
+      // console.log('onFetchError', ctx, ctx.data)
+      ctx.error = new Error(ctx.data)
+      return ctx
+    }
   },
   fetchOptions: {
     mode: 'cors'
@@ -21,17 +25,16 @@ export const useMyFetch = createFetch({
 
 export const useRequest = async (url, options) => {
   const { data, error } = options ? await useMyFetch(url).post(options.body) : await useMyFetch(url)
-  if (error.value) setError(error.value)
-  return JSON.parse(data.value)
+  // console.log('error', error)
+  // console.log('data', data)
+  if (error.value?.message) {
+    setError(error.value?.message)
+  } else {
+    return JSON.parse(data.value)
+  }
 }
 
 const setError = (message) => {
-  toast(message, {
-    theme: "colored",
-    type: "error",
-    position: "top-center",
-    transition: "slide",
-    dangerouslyHTMLString: true,
-  });
+  useToast(message, "error")
   throw new Error(message)
 }

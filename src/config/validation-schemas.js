@@ -23,7 +23,7 @@ export const signUpForm = object({
   email: string()
     .required("This field is required")
     .matches(emailRegexp, "Please enter a valid email: e.g. email@domain.com"),
-  password: string().required("This field is required"),
+  password: string().required("This field is required").min(8, "Password must have minimum 8 characters"),
   password_confirmation: string()
     .required("This field is required")
     .oneOf([ref("password")], "The passwords do not match"),
