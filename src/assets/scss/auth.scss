@@ -11,7 +11,7 @@
   align-items      : center;
   width            : 512px;
   max-width        : 90%;
-  gap              : 10px;
+  gap              : 8px;
   margin           : 0 auto;
   // padding       : 40px 20px;
   padding          : 32px 20px;
@@ -47,6 +47,7 @@
 
   &__subheading {
     margin-bottom: 10px;
+    width: 75%;
   }
 
   &-request {

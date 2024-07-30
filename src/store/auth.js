@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { useRequest } from "@/composables/useFetch"
-// import { useToast } from "@/main"
+// import router from "@/router/index"
 
 export const useAuth = defineStore("auth", {
     state: () => ({
@@ -11,42 +11,43 @@ export const useAuth = defineStore("auth", {
     //     isVerified: (state) => state.me?.status === 'verified'
     // },
     actions: {
-        async login({ email, password }) {
-            await useRequest('auth/login', {
+        login({ email, password }) {
+            return useRequest('auth/login', {
                 method: 'POST',
                 body: { email, password }
             })
-                .then((data) => {
-                    if (data.token) localStorage.setItem('token', data.token)
-                })
         },
-        async signUp(body) {
-            return await useRequest('auth/sign-up', {
+        logOut() {
+            this.me = null
+            localStorage.removeItem('token')
+        },
+        signUp(body) {
+            return useRequest('auth/sign-up', {
                 method: 'POST',
                 body
             })
         },
-        async resendLink({email}) {
-            console.log('store', email)
-            return await useRequest('auth/resend-verification', {
+        resendLink({ email }) {
+            return useRequest('auth/resend-verification', {
                 method: 'POST',
                 body: {
                     email
                 }
             })
+        },
+        resetPassword({ email }) {
+            return useRequest('auth/reset-password', {
+                method: 'POST',
+                body: { email }
+            })
+        },
+        getMe() {
+            return useRequest('auth/me')
+                .then((response) => {
+                    console.log('get me', response)
+                    this.me = response
+                    return response
+                })
         }
-        // login({ email, password }) {
-        //     return useRequest("/auth/login", {
-        //         method: "POST",
-        //         body: { email: email?.toLowerCase(), password },
-        //     }).then((response) => {
-        //         console.log('response', response)
-        //         // const responseData = response.data;
-        //         // const { token_type = "", access_token = "" } = responseData;
-        //         // this.setToken(`${token_type} ${access_token}`, rememberMe);
-
-        //         return response;
-        //     });
-        // },
     },
 });

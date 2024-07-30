@@ -2,7 +2,8 @@
   <form class="auth-form" @submit.prevent="onSubmit">
     <h2 class="auth-form__heading">Log in</h2>
     <p class="auth-form__subheading">
-      If you don't have an account <router-link to="/sign-up" class="color-violet">Sign up</router-link>
+      If you don't have an account
+      <router-link to="/sign-up" class="color-violet">Sign up</router-link>
     </p>
     <div class="auth-form__row">
       <label for="email" class="fz-sm">Email</label>
@@ -37,6 +38,10 @@
       </span>
     </div>
 
+    <router-link to="/reset-password" class="auth-form__row"
+      >Forgot your password</router-link
+    >
+
     <div class="auth-form__row">
       <button
         class="app-button auth-form__submit"
@@ -63,8 +68,9 @@ const router = useRouter();
 const { handleSubmit } = useForm({
   validationSchema: loginForm,
   initialValues: {
-    email: "",
-    password: "",
+    email: "some@some.com",
+    // password: "",
+    password: "vikavika",
     // rememberMe: false,
   },
 });
@@ -84,30 +90,26 @@ const onSubmit = handleSubmit(async (values, { setErrors }) => {
       password: values.password,
       //   rememberMe: values.rememberMe,
     })
-    .then(() => {
-      console.log("done login");
-      router.push({ name: "home" });
-      //   await authStore
-      //     .getMe()
-      //     .then(() => {
-      //       router.push({ name: "profile-settings" });
-      //     })
-      //     .catch((error) => {
-      //       console.log("error", error);
-      //       loading.value = false;
-      //       const errorMessage = error.response._data?.message;
-      //       $toast.error(errorMessage || "Oops... Something went wrong!");
-      //     });
+    .then(async ({ token }) => {
+      localStorage.setItem("token", token);
+      // localStorage.setItem('token', 'ffff')
+      await authStore.getMe().then((res) => {
+        router.push({ name: "home" });
+      });
+      // .catch((error) => {
+      //   console.log("login get me error ", error);
+      // });
     })
-    .catch((error) => {
-      const errors = error.response?._data?.errors;
-      if (errors) {
-        setErrors({
-          email: errors.email[0] === "" ? "ignored" : errors.email || "",
-          password: errors.password || "",
-        });
-      }
-    })
+    // .catch((error) => {
+    //   console.log("login error page", error);
+    //   const errors = error.response?._data?.errors;
+    //   if (errors) {
+    //     setErrors({
+    //       email: errors.email[0] === "" ? "ignored" : errors.email || "",
+    //       password: errors.password || "",
+    //     });
+    //   }
+    // })
     .finally(() => {
       loading.value = false;
     });

@@ -1,6 +1,8 @@
 
 import { createFetch } from '@vueuse/core'
 import { useToast } from "@/main"
+import router from "@/router/index.js";
+import { useAuth } from '@/store/auth'
 
 export const useMyFetch = createFetch({
   // baseUrl: process.env.BASE_URL + '/api',
@@ -14,7 +16,11 @@ export const useMyFetch = createFetch({
     },
     onFetchError(ctx) {
       // console.log('onFetchError', ctx, ctx.data)
-      ctx.error = new Error(ctx.data)
+      // ctx.error = new Error(ctx.data)
+      ctx.error = {
+        message: ctx.data,
+        status: ctx.response?.status
+      }
       return ctx
     }
   },
@@ -27,14 +33,22 @@ export const useRequest = async (url, options) => {
   const { data, error } = options ? await useMyFetch(url).post(options.body) : await useMyFetch(url)
   // console.log('error', error)
   // console.log('data', data)
-  if (error.value?.message) {
-    setError(error.value?.message)
+  if (error.value) {
+    setError(error.value)
   } else {
     return JSON.parse(data.value)
   }
 }
 
-const setError = (message) => {
-  useToast(message, "error")
+const setError = ({ message, status }) => {
+  if (status === 401) {
+    const authStore = useAuth()
+    authStore.logOut()
+    router.push({ name: 'login' })
+  }
+
+  setTimeout(() => {
+    useToast(status === 404 ? 'Not found' : message, "error")
+  }, 250)
   throw new Error(message)
 }

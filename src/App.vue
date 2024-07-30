@@ -3,6 +3,8 @@
   <div id="app">
     <app-header v-if="me" />
 
+    Me: {{ me }}
+
     <div class="app__inner">
       <router-view />
     </div>
@@ -12,7 +14,7 @@
 </template>
 
 <script setup>
-import { computed } from "vue";
+import { computed, onMounted, watch } from "vue";
 
 import AppHeader from "@/components/Base/Header.vue";
 import AppFooter from "@/components/Base/Footer.vue";
@@ -26,7 +28,9 @@ const router = useRouter();
 const authStore = useAuth();
 const me = computed(() => authStore.me);
 
-console.log('app me', me.value)
+onMounted(async () => {
+  if (localStorage.getItem("token")) await authStore.getMe();
+});
 </script>
 
 <style lang="scss" scoped>

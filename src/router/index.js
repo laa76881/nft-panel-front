@@ -1,9 +1,11 @@
 import { createRouter, createWebHistory } from "vue-router";
+import { useAuth } from '@/store/auth'
 
 //pages
 const Home = () => import("@/pages/Home.vue");
 const Login = () => import("@/pages/Login.vue")
 const SignUp = () => import("@/pages/SignUp.vue")
+const ResetPassword = () => import("@/pages/ResetPassword.vue")
 const EmailConfirmed = () => import("@/pages/EmailConfirmed.vue")
 const Expired = () => import("@/pages/Expired.vue")
 const Users = () => import("@/pages/Users.vue");
@@ -20,6 +22,11 @@ const routes = [
     path: "/sign-up",
     name: "sign-up",
     component: SignUp
+  },
+  {
+    path: "/reset-password",
+    name: "reset-password",
+    component: ResetPassword
   },
   {
     path: "/email-confirmed",
@@ -69,13 +76,15 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
   const token = localStorage.getItem('token');
-  console.log('token', token)
+  // console.log('router token', token)
 
   if ((token && to.meta.requiresAuth) || (!token && !to.meta.requiresAuth) || to.name === 'ErrorPage') {
     next();
   } else if (token && !to.meta.requiresAuth) {
     next('/')
   } else {
+    const authStore = useAuth()
+    if (authStore.me) authStore.logOut()
     next('/login');
   }
 });

@@ -30,3 +30,8 @@ export const signUpForm = object({
   // role ???
 });
 
+export const resetPasswordForm = object({
+  email: string()
+    .required("This field is required")
+    .matches(emailRegexp, "Please enter a valid email: e.g. email@domain.com"),
+})

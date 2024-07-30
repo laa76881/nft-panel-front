@@ -22,8 +22,8 @@ const users = ref([]);
 onMounted(() => {
   usersStore.getUsers()
     .then(data => users.value = data)
-    .catch((error) => {
-      console.log('mount error', error)
-    })
+    // .catch((error) => {
+    //   console.log('mount error', error)
+    // })
 });
 </script>
