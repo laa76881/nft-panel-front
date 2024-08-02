@@ -41,6 +41,12 @@ export const useAuth = defineStore("auth", {
                 body: { email }
             })
         },
+        updatePassword(body) {
+            return useRequest('auth/update-password', {
+                method: 'POST', // PUT
+                body
+            })
+        },
         getMe() {
             return useRequest('auth/me')
                 .then((response) => {

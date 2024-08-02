@@ -68,16 +68,13 @@ const router = useRouter();
 const { handleSubmit } = useForm({
   validationSchema: loginForm,
   initialValues: {
-    email: "some@some.com",
-    // password: "",
-    password: "vikavika",
-    // rememberMe: false,
+    email: "",
+    password: "",
   },
 });
 
 const email = useField("email");
 const password = useField("password");
-// const rememberMe = useField("rememberMe");
 
 const passwordShow = ref(false);
 const loading = ref(false);
@@ -88,28 +85,13 @@ const onSubmit = handleSubmit(async (values, { setErrors }) => {
     .login({
       email: values.email,
       password: values.password,
-      //   rememberMe: values.rememberMe,
     })
     .then(async ({ token }) => {
       localStorage.setItem("token", token);
-      // localStorage.setItem('token', 'ffff')
       await authStore.getMe().then((res) => {
         router.push({ name: "home" });
       });
-      // .catch((error) => {
-      //   console.log("login get me error ", error);
-      // });
     })
-    // .catch((error) => {
-    //   console.log("login error page", error);
-    //   const errors = error.response?._data?.errors;
-    //   if (errors) {
-    //     setErrors({
-    //       email: errors.email[0] === "" ? "ignored" : errors.email || "",
-    //       password: errors.password || "",
-    //     });
-    //   }
-    // })
     .finally(() => {
       loading.value = false;
     });

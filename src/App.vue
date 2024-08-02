@@ -3,8 +3,6 @@
   <div id="app">
     <app-header v-if="me" />
 
-    Me: {{ me }}
-
     <div class="app__inner">
       <router-view />
     </div>
@@ -24,7 +22,6 @@ import { useAuth } from "@/store/auth.js";
 
 const route = useRoute();
 const router = useRouter();
-
 const authStore = useAuth();
 const me = computed(() => authStore.me);
 

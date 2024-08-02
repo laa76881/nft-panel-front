@@ -16,9 +16,8 @@ export const useMyFetch = createFetch({
     },
     onFetchError(ctx) {
       // console.log('onFetchError', ctx, ctx.data)
-      // ctx.error = new Error(ctx.data)
       ctx.error = {
-        message: ctx.data,
+        message: ctx.data ? ctx.data : 'Server error',
         status: ctx.response?.status
       }
       return ctx

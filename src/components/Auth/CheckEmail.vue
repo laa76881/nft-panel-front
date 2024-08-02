@@ -55,9 +55,6 @@ const resendLink = async () => {
         resendAccess.value = true;
       }, 60 * 1000);
     })
-    // .catch((error) => {
-    //   console.log("error resend", error);
-    // })
     .finally(() => (loading.value = false));
 };
 </script>
