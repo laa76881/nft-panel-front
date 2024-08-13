@@ -10,9 +10,20 @@ const EmailConfirmed = () => import("@/pages/EmailConfirmed.vue")
 const Expired = () => import("@/pages/Expired.vue")
 const Users = () => import("@/pages/Users.vue");
 const User = () => import("@/pages/User.vue");
+const NFTs = () => import("@/pages/NFTs.vue")
+const Chat = () => import("@/pages/Chat.vue")
+const Profile = () => import("@/pages/Profile.vue")
 const ErrorPage = () => import("@/pages/Error.vue");
 
 const routes = [
+  {
+    path: "/",
+    name: "home",
+    component: Home,
+    meta: {
+      requiresAuth: true
+    }
+  },
   {
     path: "/login",
     name: "login",
@@ -38,14 +49,7 @@ const routes = [
     name: "expired",
     component: Expired
   },
-  {
-    path: "/",
-    name: "home",
-    component: Home,
-    meta: {
-      requiresAuth: true
-    }
-  },
+
   {
     path: "/users",
     name: "users",
@@ -63,6 +67,30 @@ const routes = [
     }
   },
   {
+    path: "/nfts",
+    name: "nfts",
+    component: NFTs,
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: "/chat",
+    name: "chat",
+    component: Chat,
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: "/profile",
+    name: "profile",
+    component: Profile,
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
     path: "/:pathMatch(.*)*",
     name: "ErrorPage",
     component: ErrorPage,
@@ -71,6 +99,7 @@ const routes = [
 
 const router = createRouter({
   history: createWebHistory(),
+  linkExactActiveClass: 'border-indigo-700',
   routes,
 });
 

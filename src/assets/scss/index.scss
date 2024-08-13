@@ -45,3 +45,114 @@ body {
         opacity: 0.85;
     }
 }
+
+.app__inner {
+    padding: 40px;
+}
+
+.app-input {
+    padding  : 8px;
+    font-size: 16px;
+    border   : 2px solid darkviolet;
+    outline  : none;
+
+    &:focus {
+        border: 2px solid black;
+    }
+
+    &:disabled {
+        background: $color-disabled;
+    }
+
+    &__wrap {
+        display       : flex;
+        flex-direction: column;
+        position      : relative;
+
+        &:not(:first-child) {
+            padding-bottom: 20px;
+        }
+
+        label {
+            font-size: 13px;
+        }
+    }
+
+    &__error {
+        position : absolute;
+        bottom   : 0;
+        color    : $color-danger;
+        font-size: 13px;
+    }
+
+    &__change-button {
+        position  : absolute;
+        outline   : none;
+        border    : none;
+        background: transparent;
+        cursor    : pointer;
+        top       : 20px;
+        right     : 0;
+        transition: all 0.1s;
+
+        &:hover {
+            transform: scale(1.1);
+        }
+
+        img {
+            width : 26px;
+            height: 26px;
+        }
+    }
+}
+
+// .vfm {
+//     &__content {
+//         // height         : 100%;
+//         // display        : flex;
+//         // align-items    : center;
+//         // justify-content: center;
+//         width    : 512px;
+//         max-width: 90%;
+//         /* margin: 0 auto; */
+//         position : relative;
+//         left     : 50%;
+//         top      : 50%;
+//         transform: translate(-50%, -50%);
+//     }
+// }
+
+.app-modal {
+    width    : 512px;
+    max-width: 90%;
+    position : relative;
+    left     : 50%;
+    top      : 50%;
+    transform: translate(-50%, -50%);
+
+    &__inner {
+        margin   : 0 !important;
+        width    : 100% !important;
+        max-width: 100% !important;
+    }
+
+    &__close {
+        position  : absolute;
+        right     : 10px;
+        top       : 14px;
+        background: none;
+        outline   : none;
+        border    : none;
+        cursor    : pointer;
+        transition: all 0.1s;
+
+        &:hover {
+            transform: scale(1.1);
+        }
+
+        img {
+            width : 22px;
+            height: 22px;
+        }
+    }
+}

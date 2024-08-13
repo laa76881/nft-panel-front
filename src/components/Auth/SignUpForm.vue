@@ -4,8 +4,8 @@
     <p class="auth-form__subheading">
       If you have account <router-link to="/login">Log in</router-link>
     </p>
-    <div class="auth-form__row">
-      <label for="first_name" class="fz-sm">First name</label>
+    <div class="app-input__wrap auth-form__row">
+      <label for="first_name">First name</label>
       <input
         v-model.trim="first_name.value.value"
         :error-message="first_name.errorMessage.value"
@@ -14,15 +14,15 @@
         maxlength="255"
         placeholder="Enter first name"
         :disabled="false"
-        class="auth-form__input"
+        class="app-input"
       />
-      <span class="auth-form__input-error fz-sm color-danger">
+      <span class="app-input__error">
         {{ first_name.errorMessage.value }}
       </span>
     </div>
 
-    <div class="auth-form__row">
-      <label for="last_name" class="fz-sm">Last name</label>
+    <div class="app-input__wrap auth-form__row">
+      <label for="last_name">Last name</label>
       <input
         v-model.trim="last_name.value.value"
         :error-message="last_name.errorMessage.value"
@@ -31,15 +31,15 @@
         maxlength="255"
         placeholder="Enter last name"
         :disabled="false"
-        class="auth-form__input"
+        class="app-input"
       />
-      <span class="auth-form__input-error fz-sm color-danger">
+      <span class="app-input__error">
         {{ last_name.errorMessage.value }}
       </span>
     </div>
 
-    <div class="auth-form__row">
-      <label for="email" class="fz-sm">Email</label>
+    <div class="app-input__wrap auth-form__row">
+      <label for="email">Email</label>
       <input
         v-model.trim="email.value.value"
         :error-message="email.errorMessage.value"
@@ -48,15 +48,15 @@
         maxlength="255"
         placeholder="Enter email"
         :disabled="false"
-        class="auth-form__input"
+        class="app-input"
       />
-      <span class="auth-form__input-error fz-sm color-danger">
+      <span class="app-input__error">
         {{ email.errorMessage.value }}
       </span>
     </div>
 
-    <div class="auth-form__row">
-      <label for="password" class="fz-sm">Password</label>
+    <div class="app-input__wrap auth-form__row">
+      <label for="password">Password</label>
       <input
         v-model="password.value.value"
         :error-message="password.errorMessage.value"
@@ -65,15 +65,15 @@
         placeholder="Enter Password"
         type="password"
         :disabled="false"
-        class="auth-form__input"
+        class="app-input"
       />
-      <span class="auth-form__input-error fz-sm color-danger">
+      <span class="app-input__error">
         {{ password.errorMessage.value }}
       </span>
     </div>
 
-    <div class="auth-form__row">
-      <label for="password_confirmation" class="fz-sm">Repeat password</label>
+    <div class="app-input__wrap auth-form__row">
+      <label for="password_confirmation">Repeat password</label>
       <input
         v-model="password_confirmation.value.value"
         :error-message="password_confirmation.errorMessage.value"
@@ -82,16 +82,16 @@
         placeholder="Repeat password"
         type="password"
         :disabled="false"
-        class="auth-form__input"
+        class="app-input"
       />
-      <span class="auth-form__input-error fz-sm color-danger">
+      <span class="app-input__error">
         {{ password_confirmation.errorMessage.value }}
       </span>
     </div>
 
-    <div class="auth-form__row">
+    <div class="auth-form__row auth-form__buttons">
       <button
-        class="app-button auth-form__submit"
+        class="app-button"
         type="submit"
         :disabled="loading"
       >

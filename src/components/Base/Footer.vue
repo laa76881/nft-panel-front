@@ -4,8 +4,8 @@
 
 <style lang="scss" scoped>
 .app-footer {
-  padding: 20px;
+  padding: 20px 40px;
   background: lavender;
-  margin-top: 40px;
+  // margin-top: 40px;
 }
 </style>

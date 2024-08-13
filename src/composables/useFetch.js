@@ -11,11 +11,14 @@ export const useMyFetch = createFetch({
     async beforeFetch({ options }) {
       const token = localStorage.getItem('token') || ''
       if (token) options.headers.Authorization = `Bearer ${token}`
-      options.headers['Content-Type'] = 'application/json'
+      // options.headers['Content-Type'] = 'application/json'
+      // options.headers['Sec-Fetch-Dest'] = 'document'
+      // options.headers['Accept'] = 'text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7'
+      // options.headers['Content-Type'] = 'multipart/form-data; boundary=----WebKitFormBoundaryqfkaCIzcfcenB0jq'
       return { options }
     },
     onFetchError(ctx) {
-      // console.log('onFetchError', ctx, ctx.data)
+      console.log('onFetchError', ctx, ctx.data)
       ctx.error = {
         message: ctx.data ? ctx.data : 'Server error',
         status: ctx.response?.status

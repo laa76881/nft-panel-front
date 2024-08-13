@@ -5,8 +5,8 @@
       If you don't have an account
       <router-link to="/sign-up" class="color-violet">Sign up</router-link>
     </p>
-    <div class="auth-form__row">
-      <label for="email" class="fz-sm">Email</label>
+    <div class="app-input__wrap auth-form__row">
+      <label for="email">Email</label>
       <input
         v-model.trim="email.value.value"
         :error-message="email.errorMessage.value"
@@ -15,15 +15,15 @@
         maxlength="255"
         placeholder="Enter email"
         :disabled="false"
-        class="auth-form__input"
+        class="app-input"
       />
-      <span class="auth-form__input-error fz-sm color-danger">
+      <span class="app-input__error">
         {{ email.errorMessage.value }}
       </span>
     </div>
 
-    <div class="auth-form__row">
-      <label for="password" class="fz-sm">Password</label>
+    <div class="app-input__wrap auth-form__row">
+      <label for="password">Password</label>
       <input
         v-model="password.value.value"
         :error-message="password.errorMessage.value"
@@ -31,20 +31,20 @@
         placeholder="Enter Password"
         type="password"
         :disabled="false"
-        class="auth-form__input"
+        class="app-input"
       />
-      <span class="auth-form__input-error fz-sm color-danger">
+      <span class="app-input__error">
         {{ password.errorMessage.value }}
       </span>
     </div>
 
-    <router-link to="/reset-password" class="auth-form__row"
+    <router-link to="/reset-password" class="app-input__wrap auth-form__row"
       >Forgot your password</router-link
     >
 
-    <div class="auth-form__row">
+    <div class="auth-form__row auth-form__buttons">
       <button
-        class="app-button auth-form__submit"
+        class="app-button"
         type="submit"
         :disabled="loading"
       >
@@ -68,8 +68,8 @@ const router = useRouter();
 const { handleSubmit } = useForm({
   validationSchema: loginForm,
   initialValues: {
-    email: "",
-    password: "",
+    email: "newuser1@mail.com",
+    password: "ktjgfhl1",
   },
 });
 

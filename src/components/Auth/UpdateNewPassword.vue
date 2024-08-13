@@ -3,8 +3,8 @@
     <h2 class="auth-form__heading">Reset your password</h2>
     <p class="auth-form__subheading">Create new password</p>
 
-    <div class="auth-form__row">
-      <label for="password" class="fz-sm">Password</label>
+    <div class="app-input__wrap auth-form__row">
+      <label for="password">Password</label>
       <input
         v-model="password.value.value"
         :error-message="password.errorMessage.value"
@@ -13,15 +13,15 @@
         placeholder="Enter Password"
         type="password"
         :disabled="false"
-        class="auth-form__input"
+        class="app-input"
       />
-      <span class="auth-form__input-error fz-sm color-danger">
+      <span class="app-input__error">
         {{ password.errorMessage.value }}
       </span>
     </div>
 
-    <div class="auth-form__row">
-      <label for="password_confirmation" class="fz-sm">Repeat password</label>
+    <div class="app-input__wrap auth-form__row">
+      <label for="password_confirmation">Repeat password</label>
       <input
         v-model="password_confirmation.value.value"
         :error-message="password_confirmation.errorMessage.value"
@@ -30,14 +30,14 @@
         placeholder="Repeat password"
         type="password"
         :disabled="false"
-        class="auth-form__input"
+        class="app-input"
       />
-      <span class="auth-form__input-error fz-sm color-danger">
+      <span class="app-input__error">
         {{ password_confirmation.errorMessage.value }}
       </span>
     </div>
 
-    <div class="auth-form__row">
+    <div class="app-input__wrap auth-form__row">
       <button
         class="app-button auth-form__submit"
         type="submit"

@@ -42,3 +42,16 @@ export const updatePasswordForm = object({
     .required("This field is required")
     .oneOf([ref("password")], "The passwords do not match"),
 })
+
+export const profileForm = object({
+  first_name: string().required("This field is required"),
+  last_name: string().required("This field is required"),
+})
+
+export const profilePasswordForm = object({
+  current_password: string().required("This field is required"),
+  password: string().required("This field is required").min(8, "Password must have minimum 8 characters"),
+  password_confirmation: string()
+    .required("This field is required")
+    .oneOf([ref("password")], "The passwords do not match"),
+})

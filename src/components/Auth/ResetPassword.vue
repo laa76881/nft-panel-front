@@ -4,8 +4,8 @@
     <p class="auth-form__subheading">
       Type in your email and we'll send you a link to reset your password
     </p>
-    <div class="auth-form__row">
-      <label for="email" class="fz-sm">Email</label>
+    <div class="app-input__wrap auth-form__row">
+      <label for="email">Email</label>
       <input
         v-model.trim="email.value.value"
         :error-message="email.errorMessage.value"
@@ -14,16 +14,16 @@
         maxlength="255"
         placeholder="Enter email"
         :disabled="false"
-        class="auth-form__input"
+        class="app-input"
       />
-      <span class="auth-form__input-error fz-sm color-danger">
+      <span class="app-input__error">
         {{ email.errorMessage.value }}
       </span>
     </div>
 
-    <div class="auth-form__row">
+    <div class="app-input__wrap auth-form__row">
       <button
-        class="app-button auth-form__submit"
+        class="app-button"
         type="submit"
         :disabled="loading"
       >
