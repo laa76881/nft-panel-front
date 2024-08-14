@@ -102,7 +102,6 @@ const onSubmit = handleSubmit(async (values, { setErrors }) => {
   loading.value = true;
   await profileStore
     .updatePassword({
-      id: me.value.id,
       current_password: values.current_password,
       password: values.password,
       password_confirmation: values.password_confirmation,

@@ -9,6 +9,7 @@ export const useMyFetch = createFetch({
   baseUrl: 'http://localhost:3000' + '/api', // for tests
   options: {
     async beforeFetch({ options }) {
+      console.log('before', options)
       const token = localStorage.getItem('token') || ''
       if (token) options.headers.Authorization = `Bearer ${token}`
       // options.headers['Content-Type'] = 'application/json'
@@ -31,10 +32,20 @@ export const useMyFetch = createFetch({
   },
 })
 
-export const useRequest = async (url, options) => {
-  const { data, error } = options ? await useMyFetch(url).post(options.body) : await useMyFetch(url)
-  // console.log('error', error)
-  // console.log('data', data)
+export const useRequest = async (url, options = { method: 'GET' }) => {
+  const { method, body, formData } = options
+  const { data, error } = await useMyFetch(url,
+    {
+      method,
+      body: body ? JSON.stringify(body) : formData,
+      headers: body ? {
+        'Content-Type': 'application/json'
+      } : {}
+    }
+  )
+
+  console.log('error', error)
+  console.log('data', data.value)
   if (error.value) {
     setError(error.value)
   } else {

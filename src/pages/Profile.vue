@@ -1,6 +1,4 @@
 <template>
-  <!-- <h2 class="app-heading">Your information</h2> -->
-
   <form v-if="me" class="profile" @submit.prevent="onSubmit">
     <h2 class="auth-form__heading">Your profile</h2>
 
@@ -10,14 +8,15 @@
       <div class="profile__avatar-actions">
         <button
           type="button"
+          :disabled="uploading"
           class="profile__avatar-action profile__avatar-change"
-          @click="open"
+          @click="changeAvatar"
         >
           Change
         </button>
         <button
           type="button"
-          :disabled="!me.avatar"
+          :disabled="!me.avatar || uploading"
           class="profile__avatar-action profile__avatar-delete"
           @click="removeAvatar"
         >
@@ -126,6 +125,7 @@ import { useFileDialog } from "@vueuse/core";
 
 import UpdatePasswordModal from "@/components/Modals/UpdatePasswordModal.vue";
 const isUpdatePassword = ref(false);
+const uploading = ref(false);
 
 const route = useRoute();
 const router = useRouter();
@@ -133,11 +133,12 @@ const authStore = useAuth();
 const profileStore = useProfile();
 const me = computed(() => authStore.me);
 
+import heic2any from "heic2any";
 import { uploadFile } from "@/composables/uploadFile.js";
 const allowedFormats = ".jpg,.jpeg,.png,.heic,.svg";
 const allowedFileSize = 5; // MB
 
-const { open, onChange } = useFileDialog({
+const { open: changeAvatar, onChange } = useFileDialog({
   accept: allowedFormats,
   multiple: false,
   reset: true,
@@ -146,22 +147,33 @@ const { open, onChange } = useFileDialog({
 
 onChange(async (files) => {
   if (!files) return;
-  // uploading.value = true;
+  uploading.value = true;
   await uploadFile({
     file: files[0],
     accepted: allowedFormats,
     size: allowedFileSize,
   }).then(async (file) => {
-    console.log("file", file);
+    if (file.name.toLowerCase().includes(".heic")) {
+      const originalSize = Number((file.size / (1024 * 1024)).toFixed(2));
+      file = await heic2any({
+        blob: file,
+        toType: "image/jpeg",
+        quality: originalSize > 15 ? 0.3 : 0.6,
+      }).catch((error) => {
+        console.log(error);
+      });
+    }
     const formData = new FormData();
     formData.append("avatar", file);
-    await profileStore.updateAvatar(formData).then(({ path, req }) => {
-      if (!path) return;
-      authStore.me.avatar = path;
-      useToast("Your avatar changed!", "success");
-    });
+    await profileStore
+      .updateAvatar(formData)
+      .then(({ path, req }) => {
+        if (!path) return;
+        authStore.me.avatar = path;
+        useToast("Your avatar changed!", "success");
+      })
+      .finally(() => (uploading.value = false));
   });
-  // .finally(() => (uploading.value = false));
 });
 
 const removeAvatar = async () => {
@@ -199,14 +211,15 @@ const loading = ref(false);
 
 const onSubmit = handleSubmit(async (values, { setErrors }) => {
   loading.value = true;
+  console.log('me.value', me.value)
   await profileStore
     .save({
-      id: me.value.id,
       first_name: values.first_name,
       last_name: values.last_name,
     })
     .then((res) => {
-      if (res.message) useToast(res.message, "success");
+      authStore.me = res.data
+      useToast(res.message, "success");
     })
     .finally(() => {
       loading.value = false;
