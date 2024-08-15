@@ -7,6 +7,7 @@ import router from "@/router/index.js";
 
 import { toast } from "vue3-toastify";
 import "vue3-toastify/dist/index.css";
+import "vue-multiselect/dist/vue-multiselect.css";
 
 import { createVfm } from 'vue-final-modal'
 const vfm = createVfm()

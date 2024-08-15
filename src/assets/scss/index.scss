@@ -51,7 +51,9 @@ body {
 }
 
 .app-input {
-    padding  : 8px;
+    // padding  : 8px;
+    padding  : 0 8px;
+    height   : 40px;
     font-size: 16px;
     border   : 2px solid darkviolet;
     outline  : none;
@@ -62,6 +64,10 @@ body {
 
     &:disabled {
         background: $color-disabled;
+    }
+
+    &::placeholder {
+        font-size: 14px;
     }
 
     &__wrap {
@@ -76,6 +82,13 @@ body {
         label {
             font-size: 13px;
         }
+    }
+
+    &__icon {
+        position: absolute;
+        left    : 8px;
+        width   : 24px;
+        bottom  : 8px;
     }
 
     &__error {
@@ -154,5 +167,22 @@ body {
             width : 22px;
             height: 22px;
         }
+    }
+}
+
+.multiselect {
+    color: $default-text-color !important;
+
+    &__tags {
+        border-radius   : 0 !important;
+        border-color    : $table-border-color !important;
+        // border       : 2px solid $color-violet !important;
+    }
+
+    &__content-wrapper {
+        border-radius   : 0 !important;
+        border-color    : $table-border-color !important;
+        // border       : 2px solid $color-violet !important;
+        // border-top   : none !important;
     }
 }
