@@ -1,5 +1,5 @@
 <template>
-  <VueFinalModal overlayTransition="vfm-fade" contentClass="app-modal">
+  <VueFinalModal overlay-transition="vfm-fade" content-class="app-modal">
     <form class="auth-form app-modal__inner" @submit.prevent="onSubmit">
       <button class="app-modal__close" @click="emit('close')">
         <img src="/img/close.svg" />

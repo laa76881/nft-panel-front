@@ -1,12 +1,18 @@
-$app-bg           : #ebebeb;
-$button-background: deepskyblue;
-$color-violet     : darkviolet;
-$color-danger     : red;
-$color-delete     : #e98c8c;
-$color-disabled   : #e5e5e5;
+$app-bg             : #ebebeb;
+$button-background  : deepskyblue;
+$color-violet       : darkviolet;
+$color-danger       : red;
+$color-success      : #1ebd1e;
+$color-delete       : #e98c8c;
+$color-disabled     : #e5e5e5;
+$table-border-color :#ebebeb;
 
 .color-danger {
     color: $color-danger;
+}
+
+.color-success {
+    color: $color-success;
 }
 
 .color-violet {
