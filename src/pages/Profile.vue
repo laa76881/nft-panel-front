@@ -9,7 +9,7 @@
         <button
           type="button"
           :disabled="uploading"
-          class="profile__avatar-action profile__avatar-change"
+          class="app-button profile__avatar-action"
           @click="changeAvatar"
         >
           Change
@@ -17,7 +17,7 @@
         <button
           type="button"
           :disabled="!me.avatar || uploading"
-          class="profile__avatar-action profile__avatar-delete"
+          class="app-button app-button--danger profile__avatar-action profile__avatar-delete"
           @click="removeAvatar"
         >
           Delete
@@ -211,14 +211,14 @@ const loading = ref(false);
 
 const onSubmit = handleSubmit(async (values, { setErrors }) => {
   loading.value = true;
-  console.log('me.value', me.value)
+  console.log("me.value", me.value);
   await profileStore
     .save({
       first_name: values.first_name,
       last_name: values.last_name,
     })
     .then((res) => {
-      authStore.me = res.data
+      authStore.me = res.data;
       useToast(res.message, "success");
     })
     .finally(() => {
@@ -261,14 +261,10 @@ const onSubmit = handleSubmit(async (values, { setErrors }) => {
     }
 
     &-action {
-      border: 1px solid;
       width: 80px;
       height: 24px;
-      cursor: pointer;
-    }
-
-    &-delete {
-      background: $color-delete;
+      padding: initial;
+      font-size: 14px;
     }
   }
 

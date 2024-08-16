@@ -1,12 +1,17 @@
-$app-bg             : #ebebeb;
-$button-background  : deepskyblue;
-$color-violet       : darkviolet;
-$color-danger       : red;
-$color-success      : #1ebd1e;
-$color-delete       : #e98c8c;
-$color-disabled     : #e5e5e5;
-$table-border-color :#ebebeb;
-$default-text-color : black;
+$color-violet   : darkviolet;
+$color-danger   : red;
+$color-success  : #1ebd1e;
+$color-delete   : #e98c8c;
+$color-disabled : #e5e5e5;
+
+$default-text-color   : black;
+$button-background    : lavender;
+$form-border-color    : darkviolet;
+$default-border-color : #ebebeb;
+$dark-border-color    : #d9d9d9;
+$card-background      : #ebebeb;
+
+$app-padding: 40px;
 
 .color-danger {
     color: $color-danger;

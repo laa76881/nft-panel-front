@@ -6,8 +6,8 @@ export const useUsers = defineStore("users", {
         users: null,
     }),
     actions: {
-        getUsers() {
-            return useRequest('users')
+        getUsers({ per_page, page }) {
+            return useRequest(`users?per_page=${per_page}&page=${page}`)
         },
         getUser(id) {
             return useRequest(`user/${id}`)

@@ -57,8 +57,22 @@
               {{ user.is_verified ? "Verified" : "Not verified" }}
             </p>
             <p>{{ dayjs(user.createdAt).format("DD.MM.YYYY HH:mm") }}</p>
-          </a></template
-        >
+          </a>
+
+          <div class="users__list-pagination">
+            <vue-awesome-paginate
+              v-model="filters.page"
+              :total-items="total_users"
+              :items-per-page="filters.per_page"
+              :max-pages-shown="5"
+              paginationContainerClass="app-pagination"
+              paginateButtonsClass="app-pagination__button"
+              activePageClass="app-pagination__button--active"
+            />
+            <p class="">Total users count: {{ total_users }}</p>
+          </div>
+        </template>
+
         <template v-else>
           <p class="users__list--empty">No data found</p>
         </template>
@@ -91,46 +105,61 @@ const statusOptions = [
 ];
 
 const search = ref("");
-const searchDebounced = refDebounced(search, 1000)
+const searchDebounced = refDebounced(search, 1000);
 
 const usersStore = useUsers();
 const users = ref([]);
 const filters = ref({
-  perPage: 5,
+  per_page: 5,
   page: 1,
   status: statusOptions[0],
-  search: ""
+  search: "",
 });
+const total_users = ref(0);
 
 watch(searchDebounced, () => {
-  filters.value.search = searchDebounced.value
-})
+  filters.value.search = searchDebounced.value;
+});
 
 watch(filters.value, (newValue) => {
   console.log("watch", newValue);
+  getUsersList();
   // if (newValue !== undefined) {
   //   refreshData();
   // }
 });
 
-onMounted(() => {
-  usersStore
-    .getUsers()
-    .then((data) => {
+const getUsersList = async () => {
+  await usersStore
+    .getUsers({
+      per_page: filters.value.per_page,
+      page: filters.value.page,
+    })
+    .then(({ total, data }) => {
+      console.log("update list", total, data);
+      total_users.value = total;
       users.value = data;
     })
     .catch((error) => {
       console.log("users error", error);
     });
+};
+
+onMounted(() => {
+  getUsersList();
+  // usersStore
+  //   .getUsers()
+  //   .then((data) => {
+  //     users.value = data;
+  //   })
+  //   .catch((error) => {
+  //     console.log("users error", error);
+  //   });
 });
 </script>
 
 <style lang="scss" scoped>
 .users {
-  .app-input {
-    border: 1px solid #ebebeb;
-  }
-
   .app-input__wrap {
     padding-bottom: 0;
   }
@@ -144,23 +173,33 @@ onMounted(() => {
   }
 
   &__list {
-    border: 1px solid $table-border-color;
+    border: 1px solid $default-border-color;
+
+    &-row,
+    &-pagination {
+      padding: 10px;
+    }
 
     &-row {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       align-items: center;
-      padding: 10px;
-      color: black;
+      color: $default-text-color;
       text-decoration: none;
 
       &:not(:last-child) {
-        border-bottom: 1px solid $table-border-color;
+        border-bottom: 1px solid $default-border-color;
       }
     }
 
+    &-pagination {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
     &-head {
-      background: $table-border-color;
+      background: $default-border-color;
     }
 
     &--empty {
@@ -189,7 +228,7 @@ onMounted(() => {
         width: 32px;
         height: 32px;
         border-radius: 100%;
-        // border: 1px solid $table-border-color;
+        // border: 1px solid $default-border-color;
         object-fit: cover;
         margin-right: 10px;
       }

@@ -1,8 +1,6 @@
 * {
-    font-family: 'Roboto Flex', sans-serif;
+    // font-family: 'Roboto Flex', sans-serif;
     box-sizing : border-box;
-
-
     font-family: "Montserrat", sans-serif;
     font-weight: 500;
 }
@@ -36,18 +34,26 @@ body {
 
 .app-button {
     background: $button-background;
-    padding   : 8px 48px;
+    padding   : 0 48px;
+    height    : 40px;
     font-size : 16px;
-    border    : 2px solid $color-violet;
+    border    : 1px solid $color-violet;
+    transition: all 0.1s;
 
-    &:hover {
-        cursor : pointer;
-        opacity: 0.85;
+    &:hover:not(:disabled) {
+        cursor    : pointer;
+        background: $color-violet;
+        color     : $button-background;
+    }
+
+    &--danger {
+        background  : $color-delete;
+        border-color: $default-text-color;
     }
 }
 
 .app__inner {
-    padding: 40px;
+    padding: $app-padding;
 }
 
 .app-input {
@@ -55,15 +61,16 @@ body {
     padding  : 0 8px;
     height   : 40px;
     font-size: 16px;
-    border   : 2px solid darkviolet;
+    border   : 1px solid $default-border-color;
     outline  : none;
 
     &:focus {
-        border: 2px solid black;
+        border: 1px solid $dark-border-color;
     }
 
     &:disabled {
         background: $color-disabled;
+        border    : 1px solid $dark-border-color;
     }
 
     &::placeholder {
@@ -119,29 +126,14 @@ body {
     }
 }
 
-// .vfm {
-//     &__content {
-//         // height         : 100%;
-//         // display        : flex;
-//         // align-items    : center;
-//         // justify-content: center;
-//         width    : 512px;
-//         max-width: 90%;
-//         /* margin: 0 auto; */
-//         position : relative;
-//         left     : 50%;
-//         top      : 50%;
-//         transform: translate(-50%, -50%);
-//     }
-// }
-
 .app-modal {
-    width    : 512px;
-    max-width: 90%;
-    position : relative;
-    left     : 50%;
-    top      : 50%;
-    transform: translate(-50%, -50%);
+    width     : 512px;
+    max-width : 90%;
+    position  : relative;
+    left      : 50%;
+    top       : 50%;
+    transform : translate(-50%, -50%);
+    background: $card-background;
 
     &__inner {
         margin   : 0 !important;
@@ -167,22 +159,5 @@ body {
             width : 22px;
             height: 22px;
         }
-    }
-}
-
-.multiselect {
-    color: $default-text-color !important;
-
-    &__tags {
-        border-radius   : 0 !important;
-        border-color    : $table-border-color !important;
-        // border       : 2px solid $color-violet !important;
-    }
-
-    &__content-wrapper {
-        border-radius   : 0 !important;
-        border-color    : $table-border-color !important;
-        // border       : 2px solid $color-violet !important;
-        // border-top   : none !important;
     }
 }

@@ -6,53 +6,50 @@
 }
 
 .auth-form {
-  display          : flex;
-  flex-direction   : column;
-  align-items      : center;
-  width            : 512px;
-  max-width        : 90%;
-  gap              : 8px;
-  margin           : 0 auto;
-  // padding       : 40px 20px;
-  padding          : 32px 20px;
-  background       : lavender;
-  border           : 2px solid $color-violet;
+  display       : flex;
+  flex-direction: column;
+  align-items   : center;
+  width         : 512px;
+  max-width     : 90%;
+  gap           : 8px;
+  margin        : 0 auto;
+  padding       : 32px 20px;
+  background    : $button-background;
+  border        : 1px solid $form-border-color;
 
-  &__row {
-    // position      : relative;
-    width         : 75%;
-    // display       : flex;
-    // flex-direction: column;
-
-    // &:not(:last-child) {
-    //   padding-bottom: 20px;
-    // }
+  a {
+    color: $color-violet;
   }
 
-  // &__input {
-  //   padding  : 8px;
-  //   font-size: 16px;
-  //   border   : 2px solid $color-violet;
-  //   outline  : none;
+  .app-input {
+    border-color: $form-border-color;
+  }
 
-  //   &:focus {
-  //     border: 2px solid black;
-  //   }
+  .app-button {
+    background: $color-violet;
+    // color     : white;
 
-  //   &-error {
-  //     position: absolute;
-  //     bottom  : 0;
-  //   }
-  // }
+    &:hover {
+      // background: transparent;
+      opacity: 0.8;
+      color     : $default-text-color;
+    }
+  }
+
+  &__row {
+    width: 75%;
+  }
 
   &__buttons {
-    display: flex;
+    display       : flex;
     flex-direction: column;
   }
 
   &__subheading {
     margin-bottom: 10px;
-    width: 75%;
+    width        : 75%;
+
+
   }
 
   &-request {
