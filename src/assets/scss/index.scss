@@ -32,6 +32,10 @@ body {
     text-align: center;
 }
 
+.rotate-180 {
+    transform: rotate(180deg);
+}
+
 .app-button {
     background: $button-background;
     padding   : 0 48px;
@@ -41,9 +45,10 @@ body {
     transition: all 0.1s;
 
     &:hover:not(:disabled) {
-        cursor    : pointer;
-        background: $color-violet;
-        color     : $button-background;
+        cursor       : pointer;
+        background   : $color-violet;
+        // color     : $button-background;
+        color        : white;
     }
 
     &--danger {
@@ -96,6 +101,18 @@ body {
         left    : 8px;
         width   : 24px;
         bottom  : 8px;
+
+        &-clear {
+            right : 8px;
+            left  : auto;
+            width : 16px;
+            bottom: 12px;
+            cursor: pointer;
+
+            &:hover {
+                opacity: 0.65;
+            }
+        }
     }
 
     &__error {
@@ -124,6 +141,7 @@ body {
             height: 26px;
         }
     }
+
 }
 
 .app-modal {

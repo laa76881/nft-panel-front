@@ -27,12 +27,12 @@
 
   .app-button {
     background: $color-violet;
-    // color     : white;
+    color     : white;
 
     &:hover {
       // background: transparent;
-      opacity: 0.8;
-      color     : $default-text-color;
+      opacity: 0.85;
+      // color     : $default-text-color;
     }
   }
 
