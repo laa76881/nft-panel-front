@@ -50,7 +50,11 @@
           <button
             v-if="col.sortable && col.key === filters.sorting.field"
             class="users__list-sort"
-            :class="{ 'rotate-180': filters.sorting.direction === 1 }"
+            :class="{
+              'rotate-180':
+                (filters.sorting.direction === 1 && col.key === 'createdAt') ||
+                (filters.sorting.direction === -1 && col.key !== 'createdAt'),
+            }"
             @click="updateSorting(col.key)"
           >
             <img src="/img/arrow_up.svg" />
@@ -179,7 +183,7 @@ const updateSorting = (field) => {
   } else {
     filters.value.sorting = {
       field,
-      direction: -1,
+      direction: field === "createdAt" ? -1 : 1,
     };
   }
 
