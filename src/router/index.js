@@ -11,6 +11,7 @@ const Expired = () => import("@/pages/Expired.vue")
 const Users = () => import("@/pages/Users.vue");
 const User = () => import("@/pages/User.vue");
 const NFTs = () => import("@/pages/NFTs.vue")
+const Chats = () => import("@/pages/Chats.vue") 
 const Chat = () => import("@/pages/Chat.vue")
 const Profile = () => import("@/pages/Profile.vue")
 const ErrorPage = () => import("@/pages/Error.vue");
@@ -75,7 +76,15 @@ const routes = [
     }
   },
   {
-    path: "/chat",
+    path: "/chats",
+    name: "chats",
+    component: Chats,
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
+    path: "/chat/:id",
     name: "chat",
     component: Chat,
     meta: {

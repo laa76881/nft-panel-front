@@ -1,10 +1,11 @@
-$color-violet   : darkviolet;
-$color-danger   : red;
-$color-success  : #1ebd1e;
-$color-delete   : #e98c8c;
-$color-disabled : #e5e5e5;
+$color-violet    : darkviolet;
+$color-danger    : red;
+$color-success   : #1ebd1e;
+$color-delete    : #e98c8c;
+$color-disabled  : #e5e5e5;
 
 $default-text-color   : black;
+$secondary-text-color : #939090;
 $button-background    : lavender;
 $form-border-color    : darkviolet;
 $default-border-color : #ebebeb;
@@ -15,6 +16,10 @@ $app-padding: 40px;
 
 .color-danger {
     color: $color-danger;
+}
+
+.color-secondary {
+    color: $secondary-text-color;
 }
 
 .color-success {

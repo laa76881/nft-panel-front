@@ -116,7 +116,7 @@ import VueMultiselect from "vue-multiselect";
 const headNames = [
   {
     name: "Full name",
-    key: "full_name",
+    key: "first_name",
     sortable: true,
   },
   {
@@ -159,7 +159,6 @@ const filters = ref({
   per_page: 5,
   page: 1,
   status: statusOptions[0],
-  // search: "",
   search: refDebounced(search, 1000),
   sorting: {
     field: "createdAt",

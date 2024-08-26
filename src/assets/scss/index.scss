@@ -59,6 +59,7 @@ body {
 
 .app__inner {
     padding: $app-padding;
+    min-height: calc(100vh - 90px - 64px);
 }
 
 .app-input {

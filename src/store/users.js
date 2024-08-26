@@ -14,7 +14,7 @@ export const useUsers = defineStore("users", {
             return useRequest(`users?${query}`)
         },
         getUser(id) {
-            return useRequest(`user/${id}`)
+            return useRequest(`users/${id}`)
         },
     }
 })

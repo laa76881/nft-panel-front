@@ -24,16 +24,18 @@
 </template>
 
 <script setup>
-const pagesList = ["home", "users", "nfts", "chat", "profile"];
+const pagesList = ["home", "users", "nfts", "chats", "profile"];
 </script>
 
 <style lang="scss">
 .app-header {
-  padding: 20px 40px;
+  padding: 0px 40px;
+  height: 90px;
   background: lavender;
   // margin-bottom: 40px;
   display: flex;
   justify-content: space-between;
+  align-items: center;
 
   &__nav {
     padding-left: 0;

@@ -4,8 +4,11 @@
 
 <style lang="scss" scoped>
 .app-footer {
-  padding: 20px 40px;
+  padding: 0px 40px;
+  height: 64px;
   background: lavender;
+  display: flex;
+  align-items: center;
   // margin-top: 40px;
 }
 </style>
