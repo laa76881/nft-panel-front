@@ -3,7 +3,7 @@
   <div id="app">
     <app-header v-if="me" />
 
-    <div class="app__inner">
+    <div class="app__inner" :class="{ 'app__inner--full': route.name === 'chat' }">
       <div v-if="baseStore.loading">
         Loading
       </div>
@@ -34,6 +34,8 @@ const router = useRouter();
 const authStore = useAuth();
 const baseStore = useBase()
 const me = computed(() => authStore.me);
+
+console.log('route', route)
 
 const token = ref(localStorage.getItem("token"));
 // const loading = ref(token.value ? true : false);
