@@ -38,8 +38,8 @@
               <img v-else src="/img/default_avatar.svg" />
               <p>{{ chat.from.full_name }}</p>
             </div>
-            <p>{{ chat.last_message }}</p>
-            <p>{{ !chat.type ? 'General' : ''  }}</p>
+            <p :class="{ 'color-secondary': !chat.message }">{{ chat.message ? chat.message : "Chat created." }}</p>
+            <p>{{ !chat.type ? "General" : "" }}</p>
             <p>{{ dayjs(chat.updatedAt).format("DD.MM.YYYY HH:mm") }}</p>
           </a>
 
@@ -113,7 +113,7 @@ const getChatsList = async () => {
       //   sort_direction: filters.value.sorting.direction,
     })
     .then(({ total, data }) => {
-      console.log("update list", total, data);
+      // console.log("update list", total, data);
       total_chats.value = total;
       chats.value = data;
     })

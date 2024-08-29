@@ -25,6 +25,9 @@ export const useChats = defineStore("chats", {
                 return data;
             });
         },
+        getMessages() {
+            return useRequest(`chats/${this.chat._id}/messages`)
+        },
         sendMessage({ message }) {
             return useRequest(`chats/${this.chat._id}/messages`, {
                 method: 'POST',

@@ -49,21 +49,21 @@ import { useToast } from "@/main";
 
 const route = useRoute();
 const router = useRouter();
-const chat = ref({});
 const chatsStore = useChats();
+
+const chat = ref({});
+const messages = ref([]);
+const text = ref("");
 
 onMounted(() => {
   chatsStore
     .getChat(route.params.id)
     .then((data) => {
       chat.value = data;
-      getMessages()
+      getMessages();
     })
     .catch(() => router.push("/chats"));
 });
-
-const messages = ref([]);
-const text = ref("");
 
 const socket = io("ws://localhost:3000", {
   path: `/app/${import.meta.env.VITE_SOCKET_KEY}`,
@@ -92,7 +92,10 @@ async function sendMessage(e) {
 
 async function getMessages() {
   // add pagination
-  
+  await chatsStore.getMessages().then((data) => {
+    // console.log("messages", data);
+    messages.value = data;
+  });
 }
 
 socket.on("message", (data) => {
@@ -163,7 +166,7 @@ onBeforeUnmount(() => {
     flex-direction: column;
     padding: $app-padding-xs;
     overflow: scroll;
-    gap: 8px;
+    gap: 24px;
   }
 
   &__actions {

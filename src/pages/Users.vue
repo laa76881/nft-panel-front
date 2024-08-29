@@ -188,7 +188,7 @@ const updateSorting = (field) => {
 
   filters.value.page = 1;
 
-  console.log("updateSorting", filters.value.sorting);
+  // console.log("updateSorting", filters.value.sorting);
 };
 
 const getUsersList = async () => {
