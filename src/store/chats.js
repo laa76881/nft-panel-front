@@ -13,7 +13,7 @@ export const useChats = defineStore("chats", {
             })
         },
         getChats() { // { per_page, page, search, sort_field, sort_direction }
-            // let query = `page=${page}&per_page=${per_page}&sort_field=${sort_field}&sort_direction=${sort_direction}`
+            // let query = `page=${page}&per_page=${per_page}`
             // if (search) query += '&search=' + search
 
             // return useRequest(`chats?${query}`)
@@ -25,8 +25,11 @@ export const useChats = defineStore("chats", {
                 return data;
             });
         },
-        getMessages() {
-            return useRequest(`chats/${this.chat._id}/messages`)
+        getMessages({ per_page, page }) {
+            let query = `page=${page}&per_page=${per_page}`
+            // if (search) query += '&search=' + search
+
+            return useRequest(`chats/${this.chat._id}/messages?${query}`)
         },
         sendMessage({ message }) {
             return useRequest(`chats/${this.chat._id}/messages`, {

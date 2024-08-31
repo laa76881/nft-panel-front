@@ -8,7 +8,7 @@
         <img v-if="chat.from?.avatar" :src="`${chat?.from.avatar}`" />
         <img v-else src="/img/default_avatar.svg" />
         <div>
-          <p>{{ chat.from?.full_name }}</p>
+          <p class="capitalize">{{ chat.from?.full_name }}</p>
           <p class="color-secondary">{{ chat.from?.email }}</p>
         </div>
       </div>
@@ -16,6 +16,9 @@
 
     <div class="chat__body">
       <ul class="chat__messages">
+        <button class="app-button chat__load-more" @click="filters.page += 1">
+          Load more
+        </button>
         <ChatMessage
           v-for="(message, i) in messages"
           :key="i"
@@ -24,11 +27,16 @@
       </ul>
 
       <div class="chat__actions">
-        <!-- <p class="activity"></p> -->
+        <p class="chat__actions-activity" v-if="userActivity">
+          <span class="capitalize">{{ chat.from?.full_name }}</span> is
+          typing...
+        </p>
         <textarea
           v-model="text"
           name="text"
           class="app-input chat__actions-input"
+          @keypress="emitActivity"
+          @keyup.enter="sendMessage"
         ></textarea>
         <button class="chat__actions-send" @click="sendMessage">
           <send-icon />
@@ -39,7 +47,7 @@
 </template>
 
 <script setup>
-import { onMounted, onBeforeUnmount, ref, computed } from "vue";
+import { onMounted, onBeforeUnmount, ref, computed, watch } from "vue";
 import { io } from "socket.io-client";
 import { useRoute, useRouter } from "vue-router";
 import { useChats } from "@/store/chats.js";
@@ -54,13 +62,26 @@ const chatsStore = useChats();
 const chat = ref({});
 const messages = ref([]);
 const text = ref("");
+const filters = ref({
+  per_page: 10,
+  page: 1,
+  // status: statusOptions[0],
+  // search: refDebounced(search, 1000),
+});
+const userActivity = ref(false);
+
+watch(filters.value, () => {
+  getMessages();
+});
 
 onMounted(() => {
   chatsStore
     .getChat(route.params.id)
-    .then((data) => {
+    .then(async (data) => {
       chat.value = data;
-      getMessages();
+      await getMessages();
+      if (messages.value.length)
+        scrollToMessageById(messages.value[messages.value.length - 1]._id);
     })
     .catch(() => router.push("/chats"));
 });
@@ -68,16 +89,16 @@ onMounted(() => {
 const socket = io("ws://localhost:3000", {
   path: `/app/${import.meta.env.VITE_SOCKET_KEY}`,
   reconnectionDelayMax: 10000,
+  // autoConnect: false, // need to connect socket.connect()
   auth: {
+    chat_id: route.params.id,
     token: localStorage.getItem("token"),
   },
-  // query: {
-  //   "my-key": "my-value"
-  // }
 });
 
-// const activity = document.querySelector(".activity");
-// const msgInput = document.querySelector("input");
+function emitActivity() {
+  socket.emit("activity");
+}
 
 async function sendMessage(e) {
   await chatsStore
@@ -91,24 +112,28 @@ async function sendMessage(e) {
 }
 
 async function getMessages() {
-  // add pagination
-  await chatsStore.getMessages().then((data) => {
-    // console.log("messages", data);
-    messages.value = data;
-  });
+  await chatsStore
+    .getMessages({
+      per_page: filters.value.per_page,
+      page: filters.value.page,
+    })
+    .then((data) => {
+      messages.value.unshift(...data.reverse());
+    });
 }
 
 socket.on("message", (data) => {
-  // activity.textContent = "";
-  console.log("on message", data);
+  // console.log("on message", data);
+  userActivity.value = false;
   messages.value.push(data);
+  scrollToMessageById(data._id);
 });
 
-socket.on("connected", (data) => {
+socket.on("connected", () => {
   useToast(`${chat.value.from?.full_name} connected!`, "success");
 });
 
-socket.on("disconnected", (data) => {
+socket.on("disconnected", () => {
   useToast(`${chat.value.from?.full_name} disconnected!`, "warning");
 });
 
@@ -116,20 +141,24 @@ onBeforeUnmount(() => {
   socket.disconnect();
 });
 
-// msgInput.addEventListener("keypress", () => {
-//   socket.emit("activity", socket.id.substring(0, 5));
-// });
-// let activityTimer;
-// socket.on("activity", (name) => {
-//   console.log("activity", name);
-//   activity.textContent = `${name} is typing...`;
+let activityTimer;
+socket.on("activity", () => {
+  userActivity.value = true;
+  clearTimeout(activityTimer);
+  activityTimer = setTimeout(() => {
+    userActivity.value = false;
+  }, 2000);
+});
 
-//   // Clear after 3 seconds
-//   clearTimeout(activityTimer);
-//   activityTimer = setTimeout(() => {
-//     activity.textContent = "";
-//   }, 3000);
-// });
+function scrollToMessageById(id) {
+  setTimeout(() => {
+    const el = document.querySelector(`#message-${id}`);
+    el.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  }, 100);
+}
 </script>
 
 <style lang="scss" scoped>
@@ -143,6 +172,7 @@ onBeforeUnmount(() => {
       display: flex;
       align-items: center;
       cursor: pointer;
+      width: fit-content;
 
       img {
         width: 64px;
@@ -176,6 +206,13 @@ onBeforeUnmount(() => {
     gap: 16px;
     min-height: fit-content;
     margin-top: auto;
+    position: relative;
+
+    &-activity {
+      position: absolute;
+      top: 2px;
+      font-size: 14px;
+    }
 
     &-input {
       min-height: 64px;
@@ -206,6 +243,12 @@ onBeforeUnmount(() => {
         color: white;
       }
     }
+  }
+
+  &__load-more {
+    width: fit-content;
+    margin: 20px auto;
+    padding: 0 24px;
   }
 }
 </style>

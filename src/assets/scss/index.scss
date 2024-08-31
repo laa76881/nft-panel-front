@@ -36,6 +36,10 @@ body {
     transform: rotate(180deg);
 }
 
+.capitalize {
+    text-transform: capitalize;
+}
+
 .app-button {
     background: $button-background;
     padding   : 0 48px;

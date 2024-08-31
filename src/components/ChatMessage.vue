@@ -2,6 +2,7 @@
   <div
     class="chat__message"
     :class="{ chat__message_self: message.from_id === me._id }"
+    :id="`message-${message._id}`"
   >
     <p>
       {{ message.message }}

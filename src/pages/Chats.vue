@@ -38,7 +38,7 @@
               <img v-else src="/img/default_avatar.svg" />
               <p>{{ chat.from.full_name }}</p>
             </div>
-            <p :class="{ 'color-secondary': !chat.message }">{{ chat.message ? chat.message : "Chat created." }}</p>
+            <p :class="{ 'color-secondary': !chat.message?.message }">{{ chat.message?.message ? chat.message.message : "Chat created." }}</p>
             <p>{{ !chat.type ? "General" : "" }}</p>
             <p>{{ dayjs(chat.updatedAt).format("DD.MM.YYYY HH:mm") }}</p>
           </a>

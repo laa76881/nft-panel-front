@@ -3,16 +3,17 @@
   <div id="app">
     <app-header v-if="me" />
 
-    <div class="app__inner" :class="{ 'app__inner--full': route.name === 'chat' }">
-      <div v-if="baseStore.loading">
-        Loading
-      </div>
-      <router-view /> 
+    <div
+      class="app__inner"
+      :class="{ 'app__inner--full': route.name === 'chat' }"
+    >
+      <div v-if="baseStore.loading">Loading</div>
+      <router-view />
       <!-- v-if="!loading" -->
     </div>
 
-    <app-footer v-if="me" />
-    
+    <app-footer v-if="me && route.name !== 'chat'" />
+
     <ModalsContainer />
   </div>
 </template>
@@ -27,16 +28,13 @@ import { useRoute, useRouter } from "vue-router";
 import { useAuth } from "@/store/auth.js";
 import { useBase } from "@/store/base.js";
 import { ModalsContainer } from "vue-final-modal";
-import 'vue-final-modal/style.css'
+import "vue-final-modal/style.css";
 
 const route = useRoute();
 const router = useRouter();
 const authStore = useAuth();
-const baseStore = useBase()
+const baseStore = useBase();
 const me = computed(() => authStore.me);
-
-console.log('route', route)
-
 const token = ref(localStorage.getItem("token"));
 // const loading = ref(token.value ? true : false);
 
