@@ -8,7 +8,7 @@
     }"
   >
     <div v-if="message.attachment" class="chat__message-attachment-icon">
-      <img src="/img/attach.svg" />
+      <img src="/img/attach-doc.svg" />
     </div>
 
     <div class="chat__message-text">
@@ -31,9 +31,12 @@
 
 <script setup>
 import { computed, onMounted, ref } from "vue";
-import { setFileName } from "@/tools/helpers/formatName.js";
 import { useAuth } from "@/store/auth.js";
-import dayjs from "dayjs";
+import {
+  setFileName,
+  setDate,
+  setFileSize,
+} from "@/tools/helpers/formatChatData.js";
 
 const authStore = useAuth();
 const me = computed(() => authStore.me);
@@ -45,20 +48,9 @@ const props = defineProps({
   },
 });
 
-function openFile() {
+const openFile = () => {
   window.open(props.message.attachment?.path);
-}
-
-function setDate(date) {
-  return dayjs(date).format("DD.MM.YYYY HH:mm")
-}
-
-function setFileSize(size) {
-  if (size < 1000) return size + " Б";
-  if (size < 1000000) return (size / 1000).toFixed(1) + " КБ";
-
-  return (size / 1000 / 1000).toFixed(1) + " МБ";
-}
+};
 </script>
 
 <style lang="scss" scoped>
@@ -67,7 +59,7 @@ function setFileSize(size) {
   align-items: center;
   width: fit-content;
   padding: 6px 12px;
-  border-radius: 8px;
+  border-radius: $default-border-radius;
   max-width: 80%;
   background: $button-background;
   position: relative;
@@ -98,14 +90,14 @@ function setFileSize(size) {
     &-icon {
       display: flex;
       margin-right: 4px;
-      padding: 4px;
+      padding: 8px;
       border-radius: 100%;
       background: $card-background;
       border: 1px solid $color-violet;
       margin-right: 8px;
 
       img {
-        width: 20px;
+        width: 22px;
       }
     }
   }

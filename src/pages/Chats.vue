@@ -46,7 +46,7 @@
               {{ setChatMessage(chat.message) }}
             </p>
             <p>{{ !chat.type ? "General" : "" }}</p>
-            <p>{{ dayjs(chat.updatedAt).format("DD.MM.YYYY HH:mm") }}</p>
+            <p>{{ setDate(chat.updatedAt) }}</p>
           </a>
 
           <!-- <div class="chats__list-pagination">
@@ -74,10 +74,9 @@
 <script setup>
 import { onMounted, ref, watch } from "vue";
 import { useChats } from "@/store/chats.js";
-import dayjs from "dayjs";
 import { refDebounced } from "@vueuse/core";
 import VueMultiselect from "vue-multiselect";
-import { setFileName } from "@/tools/helpers/formatName.js";
+import { setFileName, setDate } from "@/tools/helpers/formatChatData.js";
 
 const total_chats = ref(0);
 const chats = ref([]);
@@ -143,6 +142,7 @@ onMounted(() => getChatsList());
 .chats {
   &__list {
     border: 1px solid $default-border-color;
+    border-radius: $default-border-radius;
 
     &-sort {
       padding: 0;
@@ -183,6 +183,7 @@ onMounted(() => getChatsList());
 
     &-head {
       background: $default-border-color;
+      border-radius: $default-border-radius $default-border-radius 0 0;
     }
 
     &--empty {

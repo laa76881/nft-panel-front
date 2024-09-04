@@ -2,13 +2,13 @@
     color: $default-text-color !important;
 
     &__tags {
-        border-radius   : 0 !important;
-        border-color    : $default-border-color !important;
+        border-radius: $default-border-radius !important;
+        border-color : $default-border-color !important;
     }
 
     &__content-wrapper {
-        border-radius   : 0 !important;
-        border-color    : $default-border-color !important;
+        border-radius: 0 !important;
+        border-color : $default-border-color !important;
     }
 }
 
@@ -24,6 +24,7 @@
         border          : 1px solid $dark-border-color;
         color           : $default-text-color;
         transition      : all 0.1s;
+        border-radius   : $default-border-radius;
 
         &:hover {
             background-color: #d8d8d8;

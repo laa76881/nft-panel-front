@@ -47,6 +47,7 @@ body {
     font-size : 16px;
     border    : 1px solid $color-violet;
     transition: all 0.1s;
+    border-radius: $default-border-radius;
 
     &:hover:not(:disabled) {
         cursor       : pointer;
@@ -62,7 +63,7 @@ body {
 }
 
 .app__inner {
-    padding: $app-padding;
+    padding   : $app-padding;
     min-height: calc(100vh - 90px - 64px);
 
     &--full {
@@ -72,11 +73,12 @@ body {
 
 .app-input {
     // padding  : 8px;
-    padding  : 0 8px;
-    height   : 40px;
-    font-size: 16px;
-    border   : 1px solid $default-border-color;
-    outline  : none;
+    padding      : 0 8px;
+    height       : 40px;
+    font-size    : 16px;
+    border       : 1px solid $default-border-color;
+    outline      : none;
+    border-radius: $default-border-radius;
 
     &:focus {
         border: 1px solid $dark-border-color;

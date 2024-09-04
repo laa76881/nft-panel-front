@@ -5,7 +5,7 @@
 
     <div
       class="app__inner"
-      :class="{ 'app__inner--full': route.name === 'chat' }"
+      :class="{ 'app__inner--full': route.name === 'chat' || route.name === 'sign-up' }"
     >
       <div v-if="baseStore.loading">Loading</div>
       <router-view />

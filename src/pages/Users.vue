@@ -233,6 +233,7 @@ onMounted(() => getUsersList());
 
   &__list {
     border: 1px solid $default-border-color;
+    border-radius: $default-border-radius;
 
     &-sort {
       padding: 0;
@@ -273,6 +274,7 @@ onMounted(() => getUsersList());
 
     &-head {
       background: $default-border-color;
+      border-radius: $default-border-radius $default-border-radius 0 0;
     }
 
     &--empty {

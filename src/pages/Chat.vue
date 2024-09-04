@@ -51,7 +51,7 @@
           class="chat__actions-attach"
           @click="uploadFiles"
         >
-          <img src="/img/attach.svg" />
+          <img src="/img/attach-doc.svg" />
         </button>
         <input v-bind="getInputProps()" />
         <textarea
@@ -167,7 +167,7 @@ function emitActivity() {
 }
 
 async function sendMessage(file) {
-  console.log('1', file)
+  console.log("1", file);
   // if (file && file.name.toLowerCase().includes(".heic")) {
   //   const name = file.name.split(".heic")[0];
   //   const originalSize = Number((file.size / (1024 * 1024)).toFixed(2));
@@ -346,6 +346,7 @@ function scrollToMessageById(id) {
       min-height: 64px;
       width: 100%;
       padding: 8px;
+      border-radius: 8px;
     }
 
     &-send {
