@@ -38,7 +38,13 @@
               <img v-else src="/img/default_avatar.svg" />
               <p>{{ chat.from.full_name }}</p>
             </div>
-            <p :class="{ 'color-secondary': !chat.message?.message }">{{ chat.message?.message ? chat.message.message : "Chat created." }}</p>
+            <p
+              class="chats__item-message"
+              :class="{ 'color-secondary': !chat.message?.message }"
+            >
+              <img v-if="chat.message?.attachment" src="/img/attach.svg" />
+              {{ setChatMessage(chat.message) }}
+            </p>
             <p>{{ !chat.type ? "General" : "" }}</p>
             <p>{{ dayjs(chat.updatedAt).format("DD.MM.YYYY HH:mm") }}</p>
           </a>
@@ -71,6 +77,7 @@ import { useChats } from "@/store/chats.js";
 import dayjs from "dayjs";
 import { refDebounced } from "@vueuse/core";
 import VueMultiselect from "vue-multiselect";
+import { setFileName } from "@/tools/helpers/formatName.js";
 
 const total_chats = ref(0);
 const chats = ref([]);
@@ -99,6 +106,13 @@ const headNames = [
 ];
 
 const chatsStore = useChats();
+
+const setChatMessage = (message) => {
+  if (!message.message) return "Chat created.";
+  if (message.attachment) return setFileName(message.message);
+
+  return message.message;
+};
 
 const getChatsList = async () => {
   await chatsStore
@@ -191,6 +205,15 @@ onMounted(() => getChatsList());
     &:hover {
       cursor: pointer;
       background: rgba(235, 235, 235, 0.4);
+    }
+
+    &-message {
+      display: flex;
+
+      img {
+        margin-right: 4px;
+        width: 20px;
+      }
     }
 
     &-fullname {

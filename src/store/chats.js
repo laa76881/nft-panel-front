@@ -31,11 +31,24 @@ export const useChats = defineStore("chats", {
 
             return useRequest(`chats/${this.chat._id}/messages?${query}`)
         },
-        sendMessage({ message }) {
-            return useRequest(`chats/${this.chat._id}/messages`, {
+        sendMessage({ message, file }) {
+            // console.log('store sendMessage', message, file)
+            const params = {
                 method: 'POST',
-                body: { message }
-            })
+            }
+
+            if (file) {
+                const formData = new FormData();
+                formData.append("file", file); // file.fileName for HEIC formatter
+                params.formData = formData
+            } else {
+                // formData.append("message", message);    
+                params.body = {
+                    message
+                }
+            }
+
+            return useRequest(`chats/${this.chat._id}/messages`, params)
         }
     }
 })

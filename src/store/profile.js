@@ -24,6 +24,7 @@ export const useProfile = defineStore("profile", {
             })
         },
         updateAvatar(formData) {
+            console.log('avatar', formData)
             return useRequest('profile/avatar', {
                 method: 'POST',
                 formData

@@ -163,6 +163,7 @@ onChange(async (files) => {
         console.log(error);
       });
     }
+    console.log('check file', file)
     const formData = new FormData();
     formData.append("avatar", file);
     await profileStore

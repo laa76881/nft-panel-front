@@ -5,9 +5,23 @@
         class="chat__head-fullname"
         @click="router.push(`/user/${chat.from?._id}`)"
       >
-        <img v-if="chat.from?.avatar" :src="`${chat?.from.avatar}`" />
-        <img v-else src="/img/default_avatar.svg" />
-        <div>
+        <div class="chat__head-avatar">
+          <img v-if="chat.from?.avatar" :src="`${chat?.from.avatar}`" />
+          <img
+            v-else
+            src="/img/default_avatar.svg"
+            class="chat__head-avatar--default"
+          />
+
+          <div
+            class="chat__head-indicator"
+            :class="{ 'chat__head-indicator--online': isUserOnline }"
+          >
+            {{ isUserOnline ? "Online" : "Offline" }}
+          </div>
+        </div>
+
+        <div style="padding-top: 4px">
           <p class="capitalize">{{ chat.from?.full_name }}</p>
           <p class="color-secondary">{{ chat.from?.email }}</p>
         </div>
@@ -27,18 +41,27 @@
       </ul>
 
       <div class="chat__actions">
-        <p class="chat__actions-activity" v-if="userActivity">
+        <p v-if="userActivity" class="chat__actions-activity">
           <span class="capitalize">{{ chat.from?.full_name }}</span> is
           typing...
         </p>
+        <button
+          v-bind="getRootProps()"
+          :disabled="uploading"
+          class="chat__actions-attach"
+          @click="uploadFiles"
+        >
+          <img src="/img/attach.svg" />
+        </button>
+        <input v-bind="getInputProps()" />
         <textarea
           v-model="text"
           name="text"
           class="app-input chat__actions-input"
           @keypress="emitActivity"
-          @keyup.enter="sendMessage"
+          @keyup.enter="sendMessage()"
         ></textarea>
-        <button class="chat__actions-send" @click="sendMessage">
+        <button class="chat__actions-send" @click="sendMessage()">
           <send-icon />
         </button>
       </div>
@@ -55,6 +78,9 @@ import SendIcon from "@/assets/icons/send.vue";
 import ChatMessage from "@/components/ChatMessage.vue";
 import { useToast } from "@/main";
 
+import heic2any from "heic2any";
+import { useDropzone } from "vue3-dropzone";
+
 const route = useRoute();
 const router = useRouter();
 const chatsStore = useChats();
@@ -69,10 +95,50 @@ const filters = ref({
   // search: refDebounced(search, 1000),
 });
 const userActivity = ref(false);
+const isUserOnline = ref(false);
+const uploading = ref(false);
 
 watch(filters.value, () => {
   getMessages();
 });
+
+const allowedFormats =
+  ".pdf,.jpeg,.jpg,.png,.svg,.gif,.heic,.docx,.docx,.txt,.mp3";
+const allowedFileSize = 10; // 1 MB
+const maxCountFiles = 3;
+
+const { getRootProps, getInputProps, ...rest } = useDropzone({
+  onDrop,
+  accept: allowedFormats,
+  maxFiles: maxCountFiles,
+  maxSize: allowedFileSize * 1024 * 1024,
+  //   multiple: props.multiple,
+  //   noClick: props.noClick,
+  //   disabled: props.disabled,
+});
+
+function onDrop(acceptFiles, rejectReasons) {
+  // console.log("on drop");
+  const errorMessages = {
+    "too-many-files": "Too many files",
+    "file-too-large": `File Size Limit is ${allowedFileSize}MB`,
+    "file-invalid-type": "The file type is incorrect",
+  };
+
+  if (acceptFiles?.length) {
+    console.log("acceptFiles", acceptFiles);
+    acceptFiles.forEach(sendMessage);
+  }
+  if (rejectReasons?.length) {
+    rejectReasons[0].errors.forEach((error) => {
+      if (errorMessages[error.code]) {
+        error.message = errorMessages[error.code];
+        console.log("reject reason", error.message);
+        useToast(error.message, "error");
+      }
+    });
+  }
+}
 
 onMounted(() => {
   chatsStore
@@ -100,14 +166,30 @@ function emitActivity() {
   socket.emit("activity");
 }
 
-async function sendMessage(e) {
+async function sendMessage(file) {
+  console.log('1', file)
+  // if (file && file.name.toLowerCase().includes(".heic")) {
+  //   const name = file.name.split(".heic")[0];
+  //   const originalSize = Number((file.size / (1024 * 1024)).toFixed(2));
+  //   file = await heic2any({
+  //     blob: file,
+  //     toType: "image/jpeg",
+  //     quality: originalSize > 15 ? 0.3 : 0.6,
+  //   }).catch((error) => {
+  //     console.log(error);
+  //   });
+  //   file.fileName = name + ".jpeg";
+  // }
+
   await chatsStore
     .sendMessage({
       message: text.value,
+      file,
     })
     .then((message) => {
+      // console.log("good send", message);
       socket.emit("message", message);
-      text.value = "";
+      if (!message.attachment) text.value = "";
     });
 }
 
@@ -130,11 +212,13 @@ socket.on("message", (data) => {
 });
 
 socket.on("connected", () => {
-  useToast(`${chat.value.from?.full_name} connected!`, "success");
+  // useToast(`${chat.value.from?.full_name} joined to chat!`, "success");
+  isUserOnline.value = true;
 });
 
 socket.on("disconnected", () => {
-  useToast(`${chat.value.from?.full_name} disconnected!`, "warning");
+  // useToast(`${chat.value.from?.full_name} left the chat!`, "warning");
+  isUserOnline.value = false;
 });
 
 onBeforeUnmount(() => {
@@ -170,9 +254,14 @@ function scrollToMessageById(id) {
 
     &-fullname {
       display: flex;
-      align-items: center;
+      // align-items: center;
       cursor: pointer;
       width: fit-content;
+    }
+
+    &-avatar {
+      position: relative;
+      margin-right: 10px;
 
       img {
         width: 64px;
@@ -180,7 +269,28 @@ function scrollToMessageById(id) {
         border-radius: 100%;
         // border: 1px solid $default-border-color;
         object-fit: cover;
-        margin-right: 10px;
+        // display: flex;
+        border: 1px solid;
+      }
+
+      &--default img {
+        border-color: $secondary-text-color;
+      }
+    }
+
+    &-indicator {
+      position: absolute;
+      background: $secondary-text-color;
+
+      padding: 2px;
+      font-size: 10px;
+      border-radius: 4px;
+      color: white;
+      right: -38%;
+      bottom: 4px;
+
+      &--online {
+        background: $color-success;
       }
     }
   }
@@ -208,9 +318,27 @@ function scrollToMessageById(id) {
     margin-top: auto;
     position: relative;
 
+    &-attach {
+      padding: 0;
+      width: 40px;
+      height: 64px;
+      border: none;
+      background: none;
+      cursor: pointer;
+
+      &:hover img {
+        opacity: 0.75;
+      }
+
+      img {
+        width: 40px;
+      }
+    }
+
     &-activity {
       position: absolute;
       top: 2px;
+      left: calc(40px + 16px + 20px);
       font-size: 14px;
     }
 
