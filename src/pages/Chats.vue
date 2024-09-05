@@ -107,10 +107,12 @@ const headNames = [
 const chatsStore = useChats();
 
 const setChatMessage = (message) => {
-  if (!message.message) return "Chat created.";
-  if (message.attachment) return setFileName(message.message);
+  const text = message.message;
+  if (!text) return "Chat created.";
+  if (message.attachment) return setFileName(text);
 
-  return message.message;
+  if (text.length > 32) return text.slice(0, 32) + "...";
+  return text;
 };
 
 const getChatsList = async () => {
@@ -165,7 +167,8 @@ onMounted(() => getChatsList());
 
     &-row {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      // grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: 25% 40% 20% 15%;
       align-items: center;
       color: $default-text-color;
       text-decoration: none;

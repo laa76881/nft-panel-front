@@ -7,16 +7,19 @@
       'chat__message-attachment': message.attachment,
     }"
   >
-    <div v-if="message.attachment" class="chat__message-attachment-icon">
+    <div
+      v-if="message.attachment"
+      @click="openFile"
+      class="chat__message-attachment-icon"
+    >
       <img src="/img/attach-doc.svg" />
     </div>
 
     <div class="chat__message-text">
-      <p @click="message.attachment ? openFile() : ''">
-        {{
-          message.attachment ? setFileName(message.message) : message.message
-        }}
+      <p v-if="message.attachment" @click="openFile">
+        {{ setFileName(message.message) }}
       </p>
+      <p v-else v-html="setMessageText(message.message)" />
 
       <p v-if="message.attachment" class="chat__message-size">
         {{ setFileSize(message.attachment.size) }}
@@ -36,6 +39,7 @@ import {
   setFileName,
   setDate,
   setFileSize,
+  setMessageText,
 } from "@/tools/helpers/formatChatData.js";
 
 const authStore = useAuth();
@@ -63,6 +67,10 @@ const openFile = () => {
   max-width: 80%;
   background: $button-background;
   position: relative;
+
+  :deep(a) {
+    color: $color-violet;
+  }
 
   &-date {
     position: absolute;
@@ -95,6 +103,7 @@ const openFile = () => {
       background: $card-background;
       border: 1px solid $color-violet;
       margin-right: 8px;
+      cursor: pointer;
 
       img {
         width: 22px;

@@ -59,7 +59,7 @@
           name="text"
           class="app-input chat__actions-input"
           @keypress="emitActivity"
-          @keyup.enter="sendMessage()"
+          @keydown.enter="keyDownEnter"
         ></textarea>
         <button class="chat__actions-send" @click="sendMessage()">
           <send-icon />
@@ -78,7 +78,7 @@ import SendIcon from "@/assets/icons/send.vue";
 import ChatMessage from "@/components/ChatMessage.vue";
 import { useToast } from "@/main";
 
-import heic2any from "heic2any";
+// import heic2any from "heic2any";
 import { useDropzone } from "vue3-dropzone";
 
 const route = useRoute();
@@ -104,7 +104,7 @@ watch(filters.value, () => {
 
 const allowedFormats =
   ".pdf,.jpeg,.jpg,.png,.svg,.gif,.heic,.docx,.docx,.txt,.mp3";
-const allowedFileSize = 10; // 1 MB
+const allowedFileSize = 10; // 10 MB
 const maxCountFiles = 3;
 
 const { getRootProps, getInputProps, ...rest } = useDropzone({
@@ -118,7 +118,6 @@ const { getRootProps, getInputProps, ...rest } = useDropzone({
 });
 
 function onDrop(acceptFiles, rejectReasons) {
-  // console.log("on drop");
   const errorMessages = {
     "too-many-files": "Too many files",
     "file-too-large": `File Size Limit is ${allowedFileSize}MB`,
@@ -126,7 +125,6 @@ function onDrop(acceptFiles, rejectReasons) {
   };
 
   if (acceptFiles?.length) {
-    console.log("acceptFiles", acceptFiles);
     acceptFiles.forEach(sendMessage);
   }
   if (rejectReasons?.length) {
@@ -148,6 +146,8 @@ onMounted(() => {
       await getMessages();
       if (messages.value.length)
         scrollToMessageById(messages.value[messages.value.length - 1]._id);
+
+      socket.emit("check_user_connect");
     })
     .catch(() => router.push("/chats"));
 });
@@ -162,12 +162,18 @@ const socket = io("ws://localhost:3000", {
   },
 });
 
-function emitActivity() {
-  socket.emit("activity");
-}
+const keyDownEnter = (event) => {
+  if (!event.shiftKey) {
+    event.preventDefault();
+    sendMessage();
+  }
+};
 
-async function sendMessage(file) {
-  console.log("1", file);
+const emitActivity = () => {
+  socket.emit("activity");
+};
+
+const sendMessage = async (file) => {
   // if (file && file.name.toLowerCase().includes(".heic")) {
   //   const name = file.name.split(".heic")[0];
   //   const originalSize = Number((file.size / (1024 * 1024)).toFixed(2));
@@ -191,9 +197,8 @@ async function sendMessage(file) {
       socket.emit("message", message);
       if (!message.attachment) text.value = "";
     });
-}
-
-async function getMessages() {
+};
+const getMessages = async () => {
   await chatsStore
     .getMessages({
       per_page: filters.value.per_page,
@@ -202,16 +207,26 @@ async function getMessages() {
     .then((data) => {
       messages.value.unshift(...data.reverse());
     });
-}
+};
 
 socket.on("message", (data) => {
-  // console.log("on message", data);
   userActivity.value = false;
   messages.value.push(data);
   scrollToMessageById(data._id);
 });
 
-socket.on("connected", () => {
+// socket.on("connected", () => {
+//   // useToast(`${chat.value.from?.full_name} joined to chat!`, "success");
+//   isUserOnline.value = true;
+// });
+
+socket.on("check_user_connect", () => {
+  socket.emit("confirm_user_connect");
+  // useToast(`${chat.value.from?.full_name} joined to chat!`, "success");
+  // isUserOnline.value = true;
+});
+
+socket.on("confirm_user_connect", () => {
   // useToast(`${chat.value.from?.full_name} joined to chat!`, "success");
   isUserOnline.value = true;
 });
@@ -234,7 +249,7 @@ socket.on("activity", () => {
   }, 2000);
 });
 
-function scrollToMessageById(id) {
+const scrollToMessageById = (id) => {
   setTimeout(() => {
     const el = document.querySelector(`#message-${id}`);
     el.scrollIntoView({
@@ -242,7 +257,7 @@ function scrollToMessageById(id) {
       block: "start",
     });
   }, 100);
-}
+};
 </script>
 
 <style lang="scss" scoped>
@@ -296,7 +311,7 @@ function scrollToMessageById(id) {
   }
 
   &__body {
-    height: calc(100vh - 105px - 90px);
+    height: calc(100vh - 110px - 90px);
     display: flex;
     flex-direction: column;
   }
@@ -305,8 +320,10 @@ function scrollToMessageById(id) {
     display: flex;
     flex-direction: column;
     padding: $app-padding-xs;
+    padding-top: 0;
     overflow: scroll;
     gap: 24px;
+    margin-top: 0;
   }
 
   &__actions {
@@ -368,7 +385,6 @@ function scrollToMessageById(id) {
       &:hover:not(:disabled) {
         cursor: pointer;
         background: $color-violet;
-        // color     : $button-background;
         color: white;
       }
     }

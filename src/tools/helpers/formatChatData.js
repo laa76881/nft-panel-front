@@ -27,3 +27,20 @@ export function setFileSize(size) {
     if (size < 1000000) return (size / 1000).toFixed(1) + " КБ";
     return (size / 1000 / 1000).toFixed(1) + " МБ";
 }
+
+export function setMessageText(text) {
+    // return text.replaceAll("\n", " <br /> ")
+    let newMessageText = text.replaceAll("\n", " <br /> ");
+    const expression =
+      /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)/g;
+    const links = [...newMessageText.matchAll(expression)];
+    if (links.length) {
+      links.forEach((link) => {
+        newMessageText = newMessageText.replace(
+          link[0],
+          `<a href="${link[0]}" target="_blank">${link[0]}</a>`
+        );
+      });
+    }
+    return newMessageText
+}
